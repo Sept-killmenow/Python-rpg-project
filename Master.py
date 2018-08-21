@@ -12,6 +12,8 @@ mobility = 0
 
 # Input references
 Class = ''
+choice = ''
+
 
 
 def menu():
@@ -87,7 +89,58 @@ def instructions():  # Loop that displays the games instructions until the user 
         print()
 
 
-def playerstats():
+def clear():
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+    print()
+
+
+def player_stats():
 
     print(ui * 15, player.lstrip(), ui * 15)
     print("Health", health)
@@ -116,6 +169,11 @@ def townhall():
     print(ui*30)
     print()
     print('Use your number keys to choose')
+    choice = input('')
+    while Exit != 1:
+        if choice == '3':
+            woke_loop()
+            break
 
 
 def woke():
@@ -131,6 +189,15 @@ def woke():
     )
     print()
     print('Where would you like to go:')
+    print('1. The Market')
+    print('2. The Town Hall')
+    print()
+    print('Use your number keys to choose')
+
+
+def woke_loop():
+    print('You walk back to the Town square')
+    print('Where would you like to go now:')
     print('1. The Market')
     print('2. The Town Hall')
     print()
@@ -186,7 +253,7 @@ while Exit != 1:
         armor = 100
         mobility = 100
         break
-playerstats()
+player_stats()
 woke()
 while Exit != 1:  # Choices from Woke() loop
     choice = input('...')
@@ -198,15 +265,5 @@ while Exit != 1:  # Choices from Woke() loop
     if choice == '2':
         townhall()
         break
-while Exit != 1:  # Choices from townHall() loop
-    choice = input('...')
-    print()
-    if choice == '1':
-        # noticeboard
-        break
-    if choice == '2':
-        # receptionist()
-        break
-    if choice == '3':
-        # woke loop()
-        break
+
+
