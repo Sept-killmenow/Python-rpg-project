@@ -23,8 +23,6 @@ inventory = weapons + potions + misc
 inventory_count = len(inventory)
 
 
-def inventory_counted():
-    inventory_count = len(inventory)
 # Weapons
 
 # Potions
@@ -196,6 +194,9 @@ def woke_loop():
 
 
 def inventory():
+    inventory = weapons + potions + misc
+    inventory_count = len(inventory)
+    inventory_count # This should have no effect but it makes the inventory_count work so I dont HECKING know anymore
     print('=============== Inventory ===============')
     print('Weapons:')
     for weapon in weapons:
