@@ -10,10 +10,34 @@ health = 0
 armor = 0
 mobility = 0
 
+
 # Input references
 Class = ''
 choice = ''
 
+# Inventory
+weapons = []
+potions = ['Small Health Potion', 'Small Health Potion', 'Small Health Potion']
+misc = []
+inventory = weapons + potions + misc
+inventory_count = len(inventory)
+
+
+def inventory_counted():
+    inventory_count = len(inventory)
+# Weapons
+
+# Potions
+
+
+def lhp():
+    if health <= 100:
+        health = health + 100
+    if health >= 100:
+        health = 100
+
+
+# Misc
 
 
 def menu():
@@ -50,7 +74,7 @@ def loopmenu():
         elif nav == 'Start':
             break
 
-        if nav == 'Instructions':
+        elif nav == 'Instructions':
             instructions()
             break
 
@@ -77,67 +101,16 @@ def instructions():  # Loop that displays the games instructions until the user 
         print(ui*30)
         print('If you would like to return type back')
         back = input('...')
-        if back == back:
+        if back == 'back':
             loopmenu()
             break
 
-        elif back == Back:
+        elif back == 'Back':
             loopmenu()
             break
         print()
         print()
         print()
-
-
-def clear():
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
 
 
 def player_stats():
@@ -193,6 +166,15 @@ def woke():
     print('2. The Town Hall')
     print()
     print('Use your number keys to choose')
+    while Exit != 1:  # Choices from Woke() loop
+        choice = input('...')
+        print()
+        if choice == '1':
+            shop()
+            break
+        elif choice == '2':
+            townhall()
+            break
 
 
 def woke_loop():
@@ -202,6 +184,52 @@ def woke_loop():
     print('2. The Town Hall')
     print()
     print('Use your number keys to choose')
+    while Exit != 1:  # Choices from Woke() loop
+        choice = input('...')
+        print()
+        if choice == '1':
+            shop()
+            break
+        elif choice == '2':
+            townhall()
+            break
+
+
+def inventory():
+    print('=============== Inventory ===============')
+    print('Weapons:')
+    for weapon in weapons:
+        print(weapon)
+    print('Potions:')
+    for potion in potions:
+        print(potion)
+    print('Misc:')
+    for other in misc:
+        print(other)
+    print('============================', inventory_count,'/25', '======')
+
+
+def shop():
+    inventory()
+    print()
+    print()
+    print('=============== Shop ===============')
+    print('How do you do stranger would you like to buy anything?')
+    print('You have', currency, 'dollars')
+    print('Weapons:')
+    print('Potions:')
+    print('Misc:')
+    print('====================================')
+    print('If you would like to buy something')
+    print('Or if you would like to return to the Town square type back')
+    while Exit != 1:
+        choice = input('...')
+        if choice == 'back':
+            woke_loop()
+            break
+        if choice == 'Back':
+            woke_loop()
+            break
 
 
 loopmenu()
@@ -222,48 +250,48 @@ while Exit != 1:
         health = 125
         armor = 25
         mobility = 15
+        weapons.append('Iron Sword')
+
         break
-    if Class == 'warrior':
+    elif Class == 'warrior':
         health = 125
         armor = 25
         mobility = 15
+        weapons.append('Iron Sword')
         break
-    if Class == 'Tank':
+    elif Class == 'Tank':
         health = 200
         armor = 50
         mobility = 5
+        weapons.append('Dull Iron Sword')
         break
-    if Class == 'tank':
+    elif Class == 'tank':
         health = 200
         armor = 50
         mobility = 5
+        weapons.append('Dull Iron Sword')
         break
-    if Class == 'Scout':
+    elif Class == 'Scout':
         health = 80
         armor = 0
         mobility = 30
+        weapons.append('Iron Dagger')
+        weapons.append('Short Bow')
+        misc.append('Arrow'*5)
         break
-    if Class == 'scout':
+    elif Class == 'scout':
         health = 80
         armor = 0
         mobility = 35
+        weapons.append('Iron Dagger')
+        weapons.append('Short Bow')
         break
-    if Class == 'Test':
+    elif Class == 'Test':
         health = 200
         armor = 100
         mobility = 100
+        weapons.append('Iron Dagger')
+        weapons.append('Short Bow')
         break
 player_stats()
 woke()
-while Exit != 1:  # Choices from Woke() loop
-    choice = input('...')
-    print()
-    if choice == '1':
-        print('jeff')
-        # market()
-        break
-    if choice == '2':
-        townhall()
-        break
-
-
