@@ -2,11 +2,16 @@
 Start = 0
 Exit = 0
 ui = '='
+global currency
+currency = 170
+
+
+
 class bcolors:
     # Regular Colors
     Black = "\033[0;30m"  # Black
     Red = "\033[0;31m"  # Red
-    Green = "\033[0;32m"  # Green
+    Green = "\033[92m"  # Green
     Yellow = "\033[0;33m"  # Yellow
     Blue = "\033[0;34m"  # Blue
     Purple = "\033[0;35m"  # Purple
@@ -34,11 +39,9 @@ class bcolors:
     On_White = "\033[47m"  # White
 
 
-
-
 # Class Variables
 xp = 0
-currency = 100
+
 health = 0
 armor = 0
 mobility = 0
@@ -57,15 +60,15 @@ weapons_buy = [
 weapons_buy_scout = [
     '1. Sharpened Iron Dagger $150', '2. Iron Short Sword $200', '3. Steel Dagger $400',
     '4. Sharpened Steel Dagger $650', '5. Steel Short Sword $500', '6. Sharpened Steel Short Sword $750',
-    '7. Obsidian Dagger', 'Obsidian Rapier'
+    '7. Obsidian Dagger $2000', '8. Obsidian Rapier $2000'
 ]
 potions_buy = [
     '11. Small Health Potion $75', '12. Medium Health Potion $125', '13. Large Health Potion $200',
     '14. Mobility Buff Vial $750', '15. Health Buff Vial $750'
 ]
 potions_buy_scout = [
-    '11. Small Health Potion $75', '12. Medium Health Potion $125', '13. Large Health Potion $200',
-    '14. Mobility Buff Vial $750', '15. Health Buff Vial $750'
+    '9. Small Health Potion $75', '10. Medium Health Potion $125', '11. Large Health Potion $200',
+    '12. Mobility Buff Vial $750', '13. Health Buff Vial $750'
 ]
 misc_buy = []
 misc_buy_scout = []
@@ -75,6 +78,8 @@ misc = []
 inventory = weapons + potions + misc
 inventory_count = len(inventory)
 
+# Equip
+Equipped = []
 
 # Weapons
 
@@ -87,7 +92,7 @@ inventory_count = len(inventory)
 
 def menu():
 
-        print(bcolors.UCyan + ui*30)
+        print(bcolors.Green + ui*30)
         print()
         print(
             "           ARA RPG   "
@@ -284,8 +289,25 @@ def shop():
         for weapon_buy_2 in weapons_buy_scout:
             print(weapon_buy_2)
     print('Potions:')
-    for potion_buy in potions_buy:
-        print(potion_buy)
+    if Class == 'Warrior':
+        for potion_buy in potions_buy:
+            print(potion_buy)
+    if Class == 'warrior':
+        for potion_buy in potions_buy:
+            print(potion_buy)
+    if Class == 'Tank':
+        for potion_buy in potions_buy:
+            print(potion_buy)
+    if Class == 'tank':
+        for potion_buy in potions_buy:
+            print(potion_buy)
+
+    if Class == 'Scout':
+        for potion_buy_2 in potions_buy_scout:
+            print(potion_buy_2)
+    if Class == 'scout':
+        for potion_buy_2 in potions_buy_scout:
+            print(potion_buy_2)
     print('Misc:')
     for miscs_buy in misc_buy:
         print(miscs_buy)
@@ -300,6 +322,12 @@ def shop():
         if choice == 'Back':
             woke_loop()
             break
+        if choice == 'B1' and Class == 'Warrior':
+            if currency <= 150:
+                print('Invalid')
+            if currency >= 150:
+                currency = currency - 150
+                print(currency)
 
 
 loopmenu()
