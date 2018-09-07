@@ -1,7 +1,5 @@
-import os
 from time import sleep
 import random
-# UI
 Start = 0
 Exit = 0
 ui = '='
@@ -39,7 +37,6 @@ class BColors:
     On_Cyan = "\033[46m"  # Cyan
     On_White = "\033[47m"  # White
 
-
 # Class Variables
 xp = 0
 
@@ -58,24 +55,14 @@ weapons_buy = [
     '5. Sharpened Steel Sword $750', '6. Steel Axe $1000', '7. Sharpened Steel Axe $1500',
     '8. Obsidian Strong Sword $2500', '9. Obsidian Rapier $2500', '10.Obsidian Axe $2500'
 ]
-weapons_buy_scout = [
-    '1. Sharpened Iron Dagger $150', '2. Iron Short Sword $200', '3. Steel Dagger $400',
-    '4. Sharpened Steel Dagger $650', '5. Steel Short Sword $500', '6. Sharpened Steel Short Sword $750',
-    '7. Obsidian Dagger $2000', '8. Obsidian Rapier $2000'
-]
 potions_buy = [
     '11. Small Health Potion $75', '12. Medium Health Potion $125', '13. Large Health Potion $200',
     '14. Mobility Buff Vial $750', '15. Health Buff Vial $750'
 ]
-potions_buy_scout = [
-    '9. Small Health Potion $75', '10. Medium Health Potion $125', '11. Large Health Potion $200',
-    '12. Mobility Buff Vial $750', '13. Health Buff Vial $750'
-]
 misc_buy = []
-misc_buy_scout = []
 weapons = []
-potions = ['Small Health Potion', 'Small Health Potion', 'Small Health Potion']
-misc = []
+potions = ['Small Health Potion x1', 'Small Health Potion x1', 'Small Health Potion x1']
+misc = ['Explosives x1']
 inventory = weapons + potions + misc
 inventory_count = len(inventory)
 
@@ -90,65 +77,48 @@ Equipped = []
 
 # Misc
 
+def clear():
+    print('\n'*40)
+
 
 def menu():
-
-        print(BColors.Green + ui*30)
+        clear()
+        print(BColors.Green + '[=============================================]')
         print()
-        print(
-            "           ARA RPG   "
-        )
+        print("                     Start    ")
         print()
-        print(ui*30)
+        print('[=============================================]')
+        print('\n', '                 Instructions','\n\n', '1. To navigate menus and UI you shall type\n '
+                                                             'out what the option is. Do not click on it'
+                            '\n\n 2. Try not to cheat thanks\n\n 3. Type Inventory at any\n input to open the'
+                            ' inventory\n\n','4. Type Start to begin', '\n\n', '5. To drop a item type Drop [item name]\n\n',
+              '[=============================================]')
         print()
-        print(
-            "            Start    "
-        )
-        print(
-            "         Instructions "
-        )
-        print()
-        print(ui*30)
 
 
 def loopmenu():
-
     while Exit != 1:
         menu()
-        nav = input("...")
+        nav = input("  ...")
+        clear()
         if nav == 'start' or nav == 'Start':  # If Start is typed into the input loop will break and continue
             break
 
-        elif nav == 'Instructions' or nav == 'instructions':  # If Instructions is typed into the input it will run
-            instructions()  # The Instructions function
-            break
-
-
-def instructions():  # Loop that displays the games instructions until the user types Back
-    global choice
-    print()
-    print('\n', ui * 30, '\n\n', '1. To navigate menus and UI \n you shall type out what the \n option is not click on'
-                                 ' it\n\n 2. Try not to cheat thanks\n\n 3. Type Inventory at any\n input to open the'
-                                 ' inventory\n\n', ui * 30, '\n If you would like to return\n type Back')
-    while Exit != 1:
-        choice = input(' ...')
-        if choice == 'Back' or choice == 'back':
-            loopmenu()
-        break
-
 
 def player_stats():
-    print(ui * 15, player.lstrip(), ui * 15)
+    clear()
+    print('[================ Player Stats ===============]',)
     print("Health", health)
     print("Armor", armor)
     print("Mobility", mobility)
     count = len(player)
-    print(ui * count + ui * 32)
+    print('[=============================================]')
 
 
 def townhall():
     global choice
-    print(ui*30)
+    clear()
+    print('[=============================================]')
     print()
     print(
         'You enter the town hall and'
@@ -160,18 +130,23 @@ def townhall():
         'Receptionist. what do you do:'
         )
     print()
-    print('1. Check the notice board')
-    print('2. Talk to the Receptionist')
-    print('3. Go back to the Town square')
-    print(ui*30)
+    print('[================== CHOICES ==================]')
+    print()
+    print('  1. Check the notice board')
+    print('  2. Talk to the Receptionist')
+    print('  3. Go Back to the Town square')
+    print()
+    print('[=============================================]')
     print()
     print('Use your number keys to choose')
-    choice = input('')
+    choice = input('...')
     while Exit != 1:
         if choice == '3':
+            clear()
             woke_loop()
             break
-
+        elif choice == 'Inventory' or choice == 'inventory':
+            inventory()
 
 def woke():
     global choice
@@ -186,11 +161,13 @@ def woke():
         'by a large market a Town hall.'
     )
     print()
+    print('[================== CHOICES ==================]')
+    print()
     print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
     print()
-    print('Use your number keys to choose')
+    print('[=============================================]')
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
         print()
@@ -200,15 +177,24 @@ def woke():
         elif choice == '2':
             townhall()
             break
+        elif choice == 'Inventory' or choice == 'inventory':
+            inventory()
 
 
 def woke_loop():
     global choice
+    clear()
+    print('[=============================================]')
+    print()
     print('You walk back to the Town square')
-    print('Where would you like to go now:')
+    print()
+    print('[================== CHOICES ==================]')
+    print()
+    print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
     print()
+    print('[=============================================]')
     print('Use your number keys to choose')
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
@@ -219,11 +205,13 @@ def woke_loop():
         elif choice == '2':
             townhall()
             break
+        elif choice == 'Inventory' or choice == 'inventory':
+            inventory()
 
 
 def inventory():
-    global inventory, inventory_count
-    print('=============== Inventory ===============')
+    global inventory_count
+    print('=============== Inventory ===============]')
     print('Weapons:')
     for weapon in weapons:
         print(weapon)
@@ -233,34 +221,35 @@ def inventory():
     print('Misc:')
     for other in misc:
         print(other)
-    print('============================', inventory_count, '/25', '======')
+    print('[===========================', inventory_count, '/ 25', '======]')
 
 
 def shop():
-    global weapon_buy, weapon_buy_scout
     inventory()
     print()
     print()
-    print('=============== Shop ===============')
-    print('How do you do stranger would you like to buy anything?')
+
+    print('[=================== Shop ====================]')
+    print('How do you do stranger would '
+          '\nyou like to buy anything?')
     print('You have', currency, 'dollars')
     print('Weapons:')
-    if Class == 'Tank' or Class == 'tank' or Class == 'Warrior' or Class == 'warrior':
+    if Class == 'Tank' or Class == 'tank' \
+            or Class == 'Warrior' or Class == 'warrior' or Class == 'Scout' or Class == 'scout':
         for weapons_b in weapons_buy:
             print(weapons_b)
-    if Class == 'Scout' or Class == 'scout':
-        for weapons_bs in weapons_buy_scout:
-            print(weapons_bs)
 
-    if Class == 'Warrior' or Class == 'warrior' or Class == 'Tank' or Class == 'tank':
+    if Class == 'Warrior' or Class == 'warrior' \
+            or Class == 'Tank' or Class == 'tank' or Class == 'Scout' or Class == 'scout':
         for potion_buy in potions_buy:
             print(potion_buy)
     print('Misc:')
     for miscs_buy in misc_buy:
         print(miscs_buy)
-    print('====================================')
+    print('[=============================================]')
     print('If you would like to buy something')
-    print('Or if you would like to return to the Town square type back')
+    print('Or if you would like to return'
+          '\nto the Town square type Back')
     buy()
 
 
@@ -272,38 +261,53 @@ def buy():
         if choice == 'back' or choice == 'back':
             woke_loop()
             break
-        elif choice == '1' and Class == 'Warrior' or Class == 'warrior' or Class == 'Tank' or Class == 'tank':
+        if choice == '1':
             if currency >= 150:
                 weapons.append('Sharpened Iron Sword')
-                currency = currency - 150
+                currency -= 150
                 print('You have', currency, 'dollars remaining')
                 print('You now own a Sharpened Iron Sword')
-                print()
+                clear()
                 woke_loop()
 
-        elif choice == '2' and Class == 'Warrior' or Class == 'warrior' or Class == 'Tank' or Class == 'tank':
+        if choice == '2':
             if currency >= 200:
                 weapons.append('Iron Axe')
-                currency = currency - 200
+                currency -= 200
+                clear()
                 print('You have', currency, 'dollars remaining')
                 print('You now own a Iron Axe')
                 print()
                 woke_loop()
-
+        elif choice == 'Inventory' or choice == 'inventory':
+            inventory()
 
 loopmenu()
+print('[=============================================]')
 player = input(
     "Please enter your name..."
 )
+print()
+print()
 while Exit != 1:
-    print(ui * 30)
+    print('[=============================================]')
+    print()
     print(
-        "  Please Select a class"
+        "            Please Select a class"
     )
     print(
-        " [Warrior] [Tank] [Scout]"
+        "           [Warrior] [Tank] [Scout]"
     )
-    print(ui * 30)
+    print()
+    print('Warrior: For people who like to play it safe')
+    print()
+    print('Tank: Has more health and armour but does less\n '
+          'damage.')
+    print()
+    print('Scout: Has less health and does less damage \n'
+          'but is more mobile')
+    print()
+    print('[=============================================]')
     Class = input("...")
     if Class == 'Warrior' or Class == 'warrior':
         health = 125
@@ -335,3 +339,24 @@ while Exit != 1:
         break
 player_stats()
 woke()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
