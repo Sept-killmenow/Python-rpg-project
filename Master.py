@@ -1,4 +1,5 @@
 from time import sleep
+import pickle
 import random
 Start = 0
 Exit = 0
@@ -29,6 +30,8 @@ class BColors:
 
 # Class Variables
 xp = 0
+level = 1
+nextlvl = 750
 health = 0
 armor = 0
 mobility = 0
@@ -49,10 +52,10 @@ potions_buy = [
     '14. Mobility Buff Vial $750', '15. Health Buff Vial $750'
 ]
 misc_buy = [
-    '16. Explosives x1'
+    '16. Explosives x1 $250'
 ]
 weapons = []
-potions = ['Small Health Potion x1', 'Small Health Potion x1', 'Small Health Potion x1']
+potions = ['Small Health Potion', 'Small Health Potion', 'Small Health Potion']
 misc = ['']
 inventory = weapons + potions + misc
 inventory_count = len(inventory)
@@ -67,6 +70,12 @@ Equipped = []
 
 
 # Misc
+def leveling():
+    global level, xp, nextlvl
+    while xp >= nextlvl:
+        level += 1
+        xp = xp - nextlvl
+        nextlvl = round(nextlvl * 1.5)
 
 def clear():
     print('\n'*40)
@@ -76,7 +85,7 @@ def menu():
         clear()
         print(BColors.Green + '[=============================================]')
         print()
-        print("                     Start    ")
+        print("               Ara: The Epic Tale    ")
         print()
         print('[=============================================]')
         print('\n', '                 Instructions','\n\n', '1. To navigate menus and UI you shall type\n '
@@ -100,6 +109,7 @@ def loopmenu():
 def player_stats():
     clear()
     print('[================ Player Stats ===============]',)
+    print('Level:', level)
     print("Health", health)
     print("Armor", armor)
     print("Mobility", mobility)
@@ -113,13 +123,13 @@ def townhall():
     print('[=============================================]')
     print()
     print(
-        'You enter the town hall and'
+        'You stand at the town hall entrance and'
         )
     print(
-        ' see a notice board and a '
+        ' see a notice board and a Receptionist. '
         )
     print(
-        'Receptionist. what do you do:'
+        'what do you do.'
         )
     print()
     print('[================== CHOICES ==================]')
@@ -133,6 +143,14 @@ def townhall():
     print('Use your number keys to choose')
     choice = input('...')
     while Exit != 1:
+        if choice == '1':
+            clear()
+            notice()
+            break
+        if choice == '2':
+            clear()
+            receptionist()
+            break
         if choice == '3':
             clear()
             woke_loop()
@@ -140,11 +158,99 @@ def townhall():
 
 
 def notice():
-    print('=')
+    global choice
+    clear()
+    print('[=============================================]')
+    print()
+    print('              TOWN NOTICE BOARD')
+    print()
+    print('      [The Litch King]  [Hydra of Lerna]')
+    print('     [Polyphemus The Cyclops] [Drakontos]')
+    print('           [Explore the wilderness]')
+    print()
+    print('[=============================================]')
+    print()
+    print('[================== CHOICES ==================]')
+    print()
+    print('  1. Attempt to Banish the Litch King')
+    print('  2. Try to Slay The Hydra of Lerna')
+    print('  3. Go off and Destroy Polyphemus The Cyclops')
+    print('  4. Try and Behead the feared Drakontos')
+    print('  5. Explore the wilderness')
+    print('  6. Walk back to the entrance ')
+    print()
+    print('[=============================================]')
+    print()
+    print('Use your number keys to choose')
+    choice = input('...')
+    while Exit != 1:
+        if choice == '6' or choice == 'Back' or choice == 'back':
+            clear()
+            townhall()
+            break
 
 
 def receptionist():
-    print('kill me')
+    global choice
+    clear()
+    print('[=============================================]')
+    print()
+    print('  Hey there what would you like to know?')
+    print()
+    print('[=============================================]')
+    print()
+    print('[================== CHOICES ==================]')
+    print()
+    print('  1. Where am i?')
+    print('  2. What can i do around here?')
+    print('  3. Im fine thank you.')
+    print()
+    print('[=============================================]')
+    print()
+    print('Use your number keys to choose')
+    choice = input('...')
+    while Exit != 1:
+        if choice == '1':
+            clear()
+            re_reply1()
+        if choice == '2':
+            clear()
+            re_reply2()
+        if choice == '3':
+            clear()
+            woke_loop()
+            break
+
+
+def re_reply1():
+    print('[=============================================]')
+    print()
+    print('  Oh, you are in sanctuary.')
+    sleep(1)
+    print('  A safe place for all... atleast for now.')
+    sleep(1.5)
+    print('  Recently we have been attacked by creatures')
+    sleep(1.5)
+    print('  if you could, please take some time to look')
+    print('  at the notice board and hunt down these \n  animals.')
+    print()
+    print('[=============================================]')
+    sleep(10)
+    townhall()
+
+
+def re_reply2():
+    print('[=============================================]')
+    print()
+    print('  Well you could start by taking a look')
+    print('  at the notice board.')
+    print()
+    print('  We would appreciate any help you are able to')
+    print('  give.')
+    print()
+    print('[=============================================]')
+    sleep(8)
+    townhall()
 
 
 def woke():
@@ -179,6 +285,8 @@ def woke():
             break
         elif choice == 'Inventory' or choice == 'inventory' or choice == '3':
             inventory()
+        inventory_use_item()
+
 
 
 def woke_loop():
@@ -211,7 +319,7 @@ def woke_loop():
 
 
 def inventory():
-    global inventory_count
+    global inventory_count, xp
     print()
     print()
     print()
@@ -228,6 +336,17 @@ def inventory():
     for other in misc:
         print(other)
     print('[===========================', inventory_count, '/ 25', '======]')
+
+
+def inventory_use_item():
+    global health
+    if choice == 'use small health potion' or choice == 'use Small Health Potion' \
+            or choice == 'Use Small Health Potion' or choice == 'Use small health potion':
+        if health >= 200:
+            print('You cannot use this now')
+        health = + 25
+        potions.remove('Small Health Potion')
+        print('You used a Small health potion')
 
 
 def shop():
@@ -267,26 +386,106 @@ def buy():
         if choice == 'back' or choice == 'back':
             woke_loop()
             break
-        if choice == '1':
+        elif choice == '1':
             if currency >= 150:
                 weapons.append('Sharpened Iron Sword')
                 currency -= 150
-                print('You have', currency, 'dollars remaining')
-                print('You now own a Sharpened Iron Sword')
                 clear()
                 woke_loop()
 
-        if choice == '2':
+        elif choice == '2':
             if currency >= 200:
                 weapons.append('Iron Axe')
                 currency -= 200
                 clear()
-                print('You have', currency, 'dollars remaining')
-                print('You now own a Iron Axe')
-                print()
+                woke_loop()
+        elif choice == '3':
+            if currency >= 250:
+                weapons.append('Sharpened Iron Axe')
+                currency -= 250
+                clear()
+                woke_loop()
+        elif choice == '4':
+            if currency >= 550:
+                weapons.append('Steel Sword')
+                currency -= 550
+                clear()
+                woke_loop()
+        elif choice == '5':
+            if currency >= 750:
+                weapons.append('Sharpened Steel Sword')
+                currency -= 750
+                clear()
+                woke_loop()
+        elif choice == '6':
+            if currency >= 1000:
+                weapons.append('Steel Axe')
+                currency -= 1000
+                clear()
+                woke_loop()
+        elif choice == '7':
+            if currency >= 1500:
+                weapons.append('Sharpened Steel Axe')
+                currency -= 1500
+                clear()
+                woke_loop()
+        elif choice == '8':
+            if currency >= 2500:
+                weapons.append('Obsidian Strong Sword')
+                currency -= 2500
+                clear()
+                woke_loop()
+        elif choice == '9':
+            if currency >= 2500:
+                weapons.append('Obsidian Strong Sword')
+                currency -= 2500
+                clear()
+                woke_loop()
+        elif choice == '10':
+            if currency >= 2500:
+                weapons.append('Obsidian Axe')
+                currency -= 2500
+                clear()
+                woke_loop()
+        elif choice == '11':
+            if currency >= 75:
+                potions.append('Small Health Potion')
+                currency -= 75
+                clear()
+                woke_loop()
+        elif choice == '12':
+            if currency >= 125:
+                potions.append('Medium Health Potion')
+                currency -= 125
+                clear()
+                woke_loop()
+        elif choice == '13':
+            if currency >= 2500:
+                potions.append('Large Health Potion')
+                currency -= 2500
+                clear()
+                woke_loop()
+        elif choice == '14':
+            if currency >= 750:
+                potions.append('Mobility Buff Vial')
+                currency -= 750
+                clear()
+                woke_loop()
+        elif choice == '15':
+            if currency >= 750:
+                potions.append('Health Buff Vial')
+                currency -= 750
+                clear()
+                woke_loop()
+        elif choice == '16':
+            if currency >= 250:
+                potions.append('Explosives')
+                currency -= 250
+                clear()
                 woke_loop()
         elif choice == 'Inventory' or choice == 'inventory':
             inventory()
+
 
 loopmenu()
 print('[=============================================]')
@@ -344,24 +543,3 @@ while Exit != 1:
         break
 player_stats()
 woke()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
