@@ -2,7 +2,6 @@ from time import sleep
 import random
 Start = 0
 Exit = 0
-ui = '='
 currency = 150
 
 
@@ -27,19 +26,9 @@ class BColors:
     UCyan = '\033[4;36m'  # Cyan
     UWhite = "\033[4;37m"  # White
 
-    # Background
-    On_Black = "\033[40m"  # Black
-    On_Red = "\033[41m"  # Red
-    On_Green = "\033[42m"  # Green
-    On_Yellow = "\033[43m"  # Yellow
-    On_Blue = "\033[44m"  # Blue
-    On_Purple = "\033[45m"  # Purple
-    On_Cyan = "\033[46m"  # Cyan
-    On_White = "\033[47m"  # White
 
 # Class Variables
 xp = 0
-
 health = 0
 armor = 0
 mobility = 0
@@ -59,10 +48,12 @@ potions_buy = [
     '11. Small Health Potion $75', '12. Medium Health Potion $125', '13. Large Health Potion $200',
     '14. Mobility Buff Vial $750', '15. Health Buff Vial $750'
 ]
-misc_buy = []
+misc_buy = [
+    '16. Explosives x1'
+]
 weapons = []
 potions = ['Small Health Potion x1', 'Small Health Potion x1', 'Small Health Potion x1']
-misc = ['Explosives x1']
+misc = ['']
 inventory = weapons + potions + misc
 inventory_count = len(inventory)
 
@@ -97,11 +88,12 @@ def menu():
 
 
 def loopmenu():
+    global choice
     while Exit != 1:
         menu()
-        nav = input("  ...")
+        choice = input("  ...")
         clear()
-        if nav == 'start' or nav == 'Start':  # If Start is typed into the input loop will break and continue
+        if choice == 'start' or choice == 'Start':  # If Start is typed into the input loop will break and continue
             break
 
 
@@ -145,8 +137,15 @@ def townhall():
             clear()
             woke_loop()
             break
-        elif choice == 'Inventory' or choice == 'inventory':
-            inventory()
+
+
+def notice():
+    print('=')
+
+
+def receptionist():
+    print('kill me')
+
 
 def woke():
     global choice
@@ -166,6 +165,7 @@ def woke():
     print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
+    print('3. Inventory')
     print()
     print('[=============================================]')
     while Exit != 1:  # Choices from Woke() loop
@@ -177,7 +177,7 @@ def woke():
         elif choice == '2':
             townhall()
             break
-        elif choice == 'Inventory' or choice == 'inventory':
+        elif choice == 'Inventory' or choice == 'inventory' or choice == '3':
             inventory()
 
 
@@ -193,6 +193,7 @@ def woke_loop():
     print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
+    print('3. Inventory')
     print()
     print('[=============================================]')
     print('Use your number keys to choose')
@@ -205,12 +206,17 @@ def woke_loop():
         elif choice == '2':
             townhall()
             break
-        elif choice == 'Inventory' or choice == 'inventory':
+        elif choice == 'Inventory' or choice == 'inventory' or choice == '3':
             inventory()
 
 
 def inventory():
     global inventory_count
+    print()
+    print()
+    print()
+    print()
+    print()
     print('=============== Inventory ===============]')
     print('Weapons:')
     for weapon in weapons:
@@ -225,7 +231,7 @@ def inventory():
 
 
 def shop():
-    inventory()
+    clear()
     print()
     print()
 
@@ -284,10 +290,10 @@ def buy():
 
 loopmenu()
 print('[=============================================]')
+print()
 player = input(
     "Please enter your name..."
 )
-print()
 print()
 while Exit != 1:
     print('[=============================================]')
@@ -308,6 +314,7 @@ while Exit != 1:
           'but is more mobile')
     print()
     print('[=============================================]')
+    print()
     Class = input("...")
     if Class == 'Warrior' or Class == 'warrior':
         health = 125
@@ -327,8 +334,6 @@ while Exit != 1:
         armor = 0
         mobility = 30
         weapons.append('Iron Dagger')
-        weapons.append('Short Bow')
-        misc.append('Arrow'*5)
         break
     elif Class == 'Test' or Class == 'test':
         health = 200
