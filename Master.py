@@ -63,6 +63,7 @@ inventory_count = len(inventory)
 # Equip
 Equipped = []
 
+
 # Weapons
 
 
@@ -76,6 +77,11 @@ def leveling():
         level += 1
         xp = xp - nextlvl
         nextlvl = round(nextlvl * 1.5)
+
+
+def inventory_drop_item():
+    print('d')
+
 
 def clear():
     print('\n'*40)
@@ -108,12 +114,21 @@ def loopmenu():
 
 def player_stats():
     clear()
+    clear()
     print('[================ Player Stats ===============]',)
     print('Level:', level)
     print("Health", health)
     print("Armor", armor)
     print("Mobility", mobility)
-    count = len(player)
+    print('[=============================================]')
+
+
+def player_stats_callback():
+    print('[================ Player Stats ===============]',)
+    print('Level:', level)
+    print("Health", health)
+    print("Armor", armor)
+    print("Mobility", mobility)
     print('[=============================================]')
 
 
@@ -164,7 +179,7 @@ def notice():
     print()
     print('              TOWN NOTICE BOARD')
     print()
-    print('      [The Litch King]  [Hydra of Lerna]')
+    print('      [The Valkyrie]  [Hydra of Lerna]')
     print('     [Polyphemus The Cyclops] [Drakontos]')
     print('           [Explore the wilderness]')
     print()
@@ -172,7 +187,7 @@ def notice():
     print()
     print('[================== CHOICES ==================]')
     print()
-    print('  1. Attempt to Banish the Litch King')
+    print('  1. Attempt to Banish the Valkyrie')
     print('  2. Try to Slay The Hydra of Lerna')
     print('  3. Go off and Destroy Polyphemus The Cyclops')
     print('  4. Try and Behead the feared Drakontos')
@@ -188,6 +203,7 @@ def notice():
             clear()
             townhall()
             break
+        repeated()
 
 
 def receptionist():
@@ -220,6 +236,7 @@ def receptionist():
             clear()
             woke_loop()
             break
+    repeated()
 
 
 def re_reply1():
@@ -285,8 +302,7 @@ def woke():
             break
         elif choice == 'Inventory' or choice == 'inventory' or choice == '3':
             inventory()
-        inventory_use_item()
-
+        repeated()
 
 
 def woke_loop():
@@ -316,6 +332,7 @@ def woke_loop():
             break
         elif choice == 'Inventory' or choice == 'inventory' or choice == '3':
             inventory()
+        repeated()
 
 
 def inventory():
@@ -336,17 +353,60 @@ def inventory():
     for other in misc:
         print(other)
     print('[===========================', inventory_count, '/ 25', '======]')
+    repeated()
 
 
 def inventory_use_item():
-    global health
+    global health, mobility
     if choice == 'use small health potion' or choice == 'use Small Health Potion' \
             or choice == 'Use Small Health Potion' or choice == 'Use small health potion':
-        if health >= 200:
-            print('You cannot use this now')
-        health = + 25
-        potions.remove('Small Health Potion')
-        print('You used a Small health potion')
+        if 'Small Health Potion' in potions:
+            if health >= 200:
+                print('You cannot use this now')
+            if health < 200:
+                health = health + 25
+                potions.remove('Small Health Potion')
+                print('You used a Small health potion')
+        else:
+            print('You do not have a Small health potion')
+
+    if choice == 'use medium health potion' or choice == 'use medium Health Potion' \
+            or choice == 'Use Medium Health Potion' or choice == 'Use medium health potion':
+        if 'Medium Health Potion' in potions:
+            if health >= 200:
+                print('You cannot use this now')
+            if health < 200:
+                health = health + 100
+                potions.remove('Medium Health Potion')
+                print('You used a Medium health potion')
+        else:
+            print('You do not have a Medium health potion')
+
+    if choice == 'use Large health potion' or choice == 'use Large Health Potion' \
+            or choice == 'Use Large Health Potion' or choice == 'Use Large health potion':
+        if 'Large Health Potion' in potions:
+            if health >= 200:
+                print('You cannot use this now')
+            if health < 200:
+                health = health + 200
+                potions.remove('Large Health Potion')
+                print('You used a Large health potion')
+            if health > 200:
+                health = 200
+        else:
+            print('You do not have a Large health potion')
+
+    if choice == 'use Mobility Buff Vial' or choice == 'use Mobility Buff Vial' \
+            or choice == 'Use mobility buff vial' or choice == 'Use mobility buff vial':
+        if 'Mobility Buff Vial' in potions:
+            if mobility >= 75:
+                print('You cannot use this now')
+            elif mobility < 75:
+                mobility = mobility + 5
+                potions.remove('Mobility Buff Vial')
+                print('You used a Mobility Buff Vial')
+        else:
+            print('You do not have a Mobility Buff Vial')
 
 
 def shop():
@@ -356,7 +416,7 @@ def shop():
 
     print('[=================== Shop ====================]')
     print('How do you do stranger would '
-          '\nyou like to buy anything?')
+          '\nyou like to browse my wares?')
     print('You have', currency, 'dollars')
     print('Weapons:')
     if Class == 'Tank' or Class == 'tank' \
@@ -376,6 +436,7 @@ def shop():
     print('Or if you would like to return'
           '\nto the Town square type Back')
     buy()
+    repeated()
 
 
 def buy():
@@ -485,6 +546,17 @@ def buy():
                 woke_loop()
         elif choice == 'Inventory' or choice == 'inventory':
             inventory()
+
+
+def repeated():
+    global choice
+    leveling()
+    inventory_use_item()
+    inventory_drop_item()
+    if choice == 'Inventory' or choice == 'inventory':
+        inventory()
+    elif choice == 'Stats' or choice == 'stats':
+        player_stats_callback()
 
 
 loopmenu()
