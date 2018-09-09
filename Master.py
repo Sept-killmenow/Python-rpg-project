@@ -4,6 +4,7 @@ import random
 Start = 0
 Exit = 0
 currency = 150
+temp_currency = 0
 
 
 class BColors:
@@ -29,13 +30,23 @@ class BColors:
 
 
 # Class Variables
-xp = 0
+xp = 1000
 level = 1
 nextlvl = 750
 health = 0
+max_health = 200
 armor = 0
 mobility = 0
+damage = 0
 
+# Enemy Variables
+enemy_name = 'null'
+enemy_attacks = []
+enemy_health = 0
+enemy_mobility = 0
+enemy_armor = 0
+enemy_attack = 0
+enemy_max_health = 0
 
 # Input references
 Class = ''
@@ -59,28 +70,47 @@ potions = ['Small Health Potion', 'Small Health Potion', 'Small Health Potion']
 misc = ['']
 inventory = weapons + potions + misc
 inventory_count = len(inventory)
-
-# Equip
-Equipped = []
+interaction_chance = ''
 
 
-# Weapons
+def gameover():
+    global health, currency, temp_currency
+    if health <= 0:
+        health = health + 100
+        temp_currency = 0
+        print('[=============================================]')
+        print()
+        print('                You have DIED')
+        print()
+        print('[=============================================]')
+        sleep(10)
+        woke()
 
 
-# Potions
-
-
-# Misc
 def leveling():
-    global level, xp, nextlvl
+    global level, xp, nextlvl, max_health, health
     while xp >= nextlvl:
         level += 1
         xp = xp - nextlvl
         nextlvl = round(nextlvl * 1.5)
+        max_health = max_health + 15
+        health = max_health
 
 
 def inventory_drop_item():
-    print('d')
+    if choice == 'drop small health potion' or choice == 'drop Small Health Potion' \
+            or choice == 'Drop Small Health Potion' or choice == 'Drop small health potion':
+        potions.remove('Small Health Potion')
+        print('You Dropped a Small Health Potion')
+
+
+def equip():
+    global choice, damage, armor, mobility
+    if choice == 'equip sharpened iron sword' or choice == 'equip sharpened iron sword' \
+            or choice == 'Equip sharpened iron sword' or choice == 'Equip Sharpened Iron Sword':
+        damage = 10
+        mobility = mobility - 1.5
+        print('You have equipped a Sharpened Iron Sword')
 
 
 def clear():
@@ -199,6 +229,8 @@ def notice():
     print('Use your number keys to choose')
     choice = input('...')
     while Exit != 1:
+        if choice == '1':
+            interaction()
         if choice == '6' or choice == 'Back' or choice == 'back':
             clear()
             townhall()
@@ -306,7 +338,9 @@ def woke():
 
 
 def woke_loop():
-    global choice
+    global choice, currency, temp_currency
+    currency = temp_currency + currency
+    temp_currency = 0
     clear()
     print('[=============================================]')
     print()
@@ -357,11 +391,11 @@ def inventory():
 
 
 def inventory_use_item():
-    global health, mobility
+    global health, mobility, max_health
     if choice == 'use small health potion' or choice == 'use Small Health Potion' \
             or choice == 'Use Small Health Potion' or choice == 'Use small health potion':
         if 'Small Health Potion' in potions:
-            if health >= 200:
+            if health >= max_health:
                 print('You cannot use this now')
             if health < 200:
                 health = health + 25
@@ -373,7 +407,7 @@ def inventory_use_item():
     if choice == 'use medium health potion' or choice == 'use medium Health Potion' \
             or choice == 'Use Medium Health Potion' or choice == 'Use medium health potion':
         if 'Medium Health Potion' in potions:
-            if health >= 200:
+            if health >= max_health:
                 print('You cannot use this now')
             if health < 200:
                 health = health + 100
@@ -385,7 +419,7 @@ def inventory_use_item():
     if choice == 'use Large health potion' or choice == 'use Large Health Potion' \
             or choice == 'Use Large Health Potion' or choice == 'Use Large health potion':
         if 'Large Health Potion' in potions:
-            if health >= 200:
+            if health >= max_health:
                 print('You cannot use this now')
             if health < 200:
                 health = health + 200
@@ -553,10 +587,128 @@ def repeated():
     leveling()
     inventory_use_item()
     inventory_drop_item()
+    equip()
     if choice == 'Inventory' or choice == 'inventory':
         inventory()
     elif choice == 'Stats' or choice == 'stats':
         player_stats_callback()
+
+
+def interaction():
+    global interaction_chance, choice
+    interaction_chance = random.randint(1, 5)
+    if interaction_chance == 1:
+        clear()
+        print('[=============================================]')
+        print()
+        print('As you set off on your adventure you see the')
+        print('small town disappear almost instantaneously.')
+        print('You soon find a convey of what appears to be')
+        print('knights on horses.')
+        print()
+        print('[=============================================]')
+        print()
+        print('[================== CHOICES ==================]')
+        print()
+        print('What would you like to do:')
+        print('1. Attack the knights')
+        print('2. Approach the knights')
+        print('3. Ignore the knights')
+        print()
+        print('[=============================================]')
+        print('Use your number keys to choose')
+        while Exit != 1:  # Choices from Woke() loop
+            choice = input('...')
+            print()
+
+            if choice == '1':
+                skeletal_knights()
+                break
+            elif choice == '2':
+                skeletal_knights()
+                break
+            if choice == '3':
+                break
+            repeated()
+            gameover()
+    if interaction_chance == 3 or interaction_chance == 4 or interaction_chance == 5:
+        print('[=============================================]')
+        print()
+        print('   You continue to your destination. safely')
+        print()
+        print('[=============================================]')
+        while Exit != 1:
+            break
+
+
+def skeletal_knights():
+    global enemy_health, enemy_mobility, enemy_armor, enemy_attack, enemy_max_health, enemy_name, enemy_attacks
+    enemy_name = 'Skeletal Knight'
+    enemy_attacks = ['SKULL SMASH', 'BONE CLUB', 'SPOOK']
+    enemy_health = enemy_max_health
+    enemy_mobility = 15
+    enemy_armor = 7
+    random.randint(0, 10)
+    enemy_max_health = 75
+    if level >= 5:
+        enemy_health = enemy_max_health
+        enemy_mobility = 25
+        enemy_armor = 15
+        random.randint(10, 20)
+        enemy_max_health = 125
+    if level >= 15:
+        enemy_health = enemy_max_health
+        enemy_mobility = 30
+        enemy_armor = 20
+        enemy_attack = random.randint(20, 28)
+        enemy_max_health = 125
+    if level >= 25:
+        enemy_health = enemy_max_health
+        enemy_mobility = 35
+        enemy_armor = 25
+        enemy_attack = random.randint(28, 35)
+        enemy_max_health = 150
+    if level >= 35:
+        enemy_health = enemy_max_health
+        enemy_mobility = 45
+        enemy_armor = 35
+        enemy_attack = random.randint(35, 45)
+        enemy_max_health = 175
+    if level >= 45:
+        enemy_health = enemy_max_health
+        enemy_mobility = 40
+        enemy_armor = 30
+        enemy_attack = random.randint(35, 45)
+        enemy_max_health = 200
+    if interaction_chance == 1:
+        clear()
+        print('[=============================================]')
+        print()
+        print('As you get closer you realise that these are')
+        print('not knights but undead knights.')
+        print('They notice you and start to move towards you')
+        print()
+        print('[=============================================]')
+        sleep(5)
+        clear()
+        attack()
+        repeated()
+        gameover()
+
+
+def attack():
+    print('[=============================================]')
+    print()
+    print('The', enemy_name, 'used', random.choice(enemy_attacks))
+    print()
+    print('[=============================================]')
+
+
+def valkyrie():
+
+    print('[=============================================]')
+    print()
+    print('[=============================================]')
 
 
 loopmenu()
@@ -567,6 +719,7 @@ player = input(
 )
 print()
 while Exit != 1:
+    clear()
     print('[=============================================]')
     print()
     print(
@@ -613,5 +766,6 @@ while Exit != 1:
         weapons.append('Iron Dagger')
         weapons.append('Short Bow')
         break
+
 player_stats()
 woke()
