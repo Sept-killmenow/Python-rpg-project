@@ -1,6 +1,6 @@
 # ReadMe
 
-## This project is going to be used for my school project on python at ara.
+#### This project is going to be used for my school project on python at ara.
 
 ###### ToDo
 
@@ -10,7 +10,7 @@
 - [ ] Turn based combat.
 - [x] Inventory.
 - [x] XP system.
-- [ ] Shopping system.
+- [x] Shopping system.
 - [ ] Quest system.
 - [x] UI Elements.
 - [ ] QOL improvements.
