@@ -32,7 +32,7 @@ class BColors:
 # Class Variables
 xp = 1000
 level = 1
-nextlvl = 750
+next_lvl = 750
 health = 0
 max_health = 200
 armor = 0
@@ -88,13 +88,14 @@ def gameover():
 
 
 def leveling():
-    global level, xp, nextlvl, max_health, health
-    while xp >= nextlvl:
+    global level, xp, next_lvl, max_health, health
+    while xp >= next_lvl:
         level += 1
-        xp = xp - nextlvl
-        nextlvl = round(nextlvl * 1.5)
+        xp = xp - next_lvl
+        next_lvl = round(next_lvl * 1.5)
         max_health = max_health + 15
         health = max_health
+        print('You have leveled up!')
 
 
 def inventory_drop_item():
@@ -617,6 +618,7 @@ def interaction():
         print()
         print('[=============================================]')
         print('Use your number keys to choose')
+        interaction_chance = 0
         while Exit != 1:  # Choices from Woke() loop
             choice = input('...')
             print()
@@ -637,14 +639,12 @@ def interaction():
         print('   You continue to your destination. safely')
         print()
         print('[=============================================]')
-        while Exit != 1:
-            break
 
 
 def skeletal_knights():
     global enemy_health, enemy_mobility, enemy_armor, enemy_attack, enemy_max_health, enemy_name, enemy_attacks
     enemy_name = 'Skeletal Knight'
-    enemy_attacks = ['SKULL SMASH', 'BONE CLUB', 'SPOOK']
+    enemy_attacks = ['SKULL SMASH', '', 'SPOOK']
     enemy_health = enemy_max_health
     enemy_mobility = 15
     enemy_armor = 7
@@ -697,11 +697,22 @@ def skeletal_knights():
 
 
 def attack():
+    global enemy_health, enemy_name, enemy_attacks, health, xp
     print('[=============================================]')
     print()
+    print('The', enemy_name, 'has', enemy_health, 'HP Remaining')
+    print()
+    print('[=============================================]')
     print('The', enemy_name, 'used', random.choice(enemy_attacks))
-    print()
-    print('[=============================================]')
+    if enemy_health <= 0:
+        print('[=============================================]')
+        print()
+        print('        The', enemy_name, 'has perished')
+        print()
+        leveling()
+        print('You now have', xp)
+        print('HP:', health)
+        print('[=============================================]')
 
 
 def valkyrie():
