@@ -3,6 +3,7 @@ import pickle
 import random
 Start = 0
 Exit = 0
+health_percent = 0
 currency = 150
 temp_currency = 0
 
@@ -38,7 +39,6 @@ max_health = 200
 armor = 0
 mobility = 0
 damage = 0
-
 # Enemy Variables
 enemy_name = 'null'
 enemy_attacks = []
@@ -150,7 +150,7 @@ def player_stats():
     clear()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('Level:', level)
-    print("Health", health)
+    print("Health:", health_print())
     print("Armor", armor)
     print("Mobility", mobility)
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
@@ -725,10 +725,9 @@ def valkyrie():
 
 
 def health_print():
-    global max_health
-    if health % max_health:
-        print(BColors.red, '▓')
-
+    global max_health, health_percent, health
+    health_percent = health * 100/200
+    print(health_percent)
 
 loopmenu()
 print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
@@ -783,6 +782,5 @@ while Exit != 1:
         weapons.append('Iron Dagger')
         weapons.append('Short Bow')
         break
-
 player_stats()
 woke()
