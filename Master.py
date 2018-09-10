@@ -78,11 +78,11 @@ def gameover():
     if health <= 0:
         health = health + 100
         temp_currency = 0
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print('                You have DIED')
         print()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         sleep(10)
         woke()
 
@@ -120,16 +120,18 @@ def clear():
 
 def menu():
         clear()
-        print(BColors.Green + '[=============================================]')
+        print(BColors.Green + '▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print("               Ara: The Epic Tale    ")
         print()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print('\n', '                 Instructions','\n\n', '1. To navigate menus and UI you shall type\n '
                                                              'out what the option is. Do not click on it'
                             '\n\n 2. Try not to cheat thanks\n\n 3. Type Inventory at any\n input to open the'
-                            ' inventory\n\n','4. Type Start to begin', '\n\n', '5. To drop a item type Drop [item name]\n\n',
-              '[=============================================]')
+                            ' inventory\n\n', '4. Type Start to begin', '\n\n',
+              '5. To drop a item type Drop [item name]\n\n',
+              )
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
 
 
@@ -146,27 +148,27 @@ def loopmenu():
 def player_stats():
     clear()
     clear()
-    print('[================ Player Stats ===============]',)
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('Level:', level)
     print("Health", health)
     print("Armor", armor)
     print("Mobility", mobility)
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
 
 
 def player_stats_callback():
     print('[================ Player Stats ===============]',)
     print('Level:', level)
-    print("Health", health)
+    print(BColors.Black, 'Health', health_print())
     print("Armor", armor)
     print("Mobility", mobility)
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
 
 
 def townhall():
     global choice
     clear()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print(
         'You stand at the town hall entrance and'
@@ -178,13 +180,13 @@ def townhall():
         'what do you do.'
         )
     print()
-    print('[================== CHOICES ==================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('  1. Check the notice board')
     print('  2. Talk to the Receptionist')
     print('  3. Go Back to the Town square')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('Use your number keys to choose')
     choice = input('...')
@@ -206,7 +208,7 @@ def townhall():
 def notice():
     global choice
     clear()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('              TOWN NOTICE BOARD')
     print()
@@ -214,9 +216,9 @@ def notice():
     print('     [Polyphemus The Cyclops] [Drakontos]')
     print('           [Explore the wilderness]')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
-    print('[================== CHOICES ==================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('  1. Attempt to Banish the Valkyrie')
     print('  2. Try to Slay The Hydra of Lerna')
@@ -225,7 +227,7 @@ def notice():
     print('  5. Explore the wilderness')
     print('  6. Walk back to the entrance ')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('Use your number keys to choose')
     choice = input('...')
@@ -242,19 +244,19 @@ def notice():
 def receptionist():
     global choice
     clear()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
-    print('  Hey there what would you like to know?')
+    print('  Hey there what would you like to know?     ')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
-    print('[================== CHOICES ==================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('  1. Where am i?')
     print('  2. What can i do around here?')
     print('  3. Im fine thank you.')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('Use your number keys to choose')
     choice = input('...')
@@ -273,7 +275,7 @@ def receptionist():
 
 
 def re_reply1():
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('  Oh, you are in sanctuary.')
     sleep(1)
@@ -284,13 +286,13 @@ def re_reply1():
     print('  if you could, please take some time to look')
     print('  at the notice board and hunt down these \n  animals.')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     sleep(10)
     townhall()
 
 
 def re_reply2():
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('  Well you could start by taking a look')
     print('  at the notice board.')
@@ -298,7 +300,7 @@ def re_reply2():
     print('  We would appreciate any help you are able to')
     print('  give.')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     sleep(8)
     townhall()
 
@@ -316,14 +318,14 @@ def woke():
         'by a large market a Town hall.'
     )
     print()
-    print('[================== CHOICES ==================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
     print('3. Inventory')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
         print()
@@ -343,18 +345,18 @@ def woke_loop():
     currency = temp_currency + currency
     temp_currency = 0
     clear()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('You walk back to the Town square')
     print()
-    print('[================== CHOICES ==================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
     print('3. Inventory')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('Use your number keys to choose')
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
@@ -466,7 +468,7 @@ def shop():
     print('Misc:')
     for miscs_buy in misc_buy:
         print(miscs_buy)
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('If you would like to buy something')
     print('Or if you would like to return'
           '\nto the Town square type Back')
@@ -600,14 +602,14 @@ def interaction():
     interaction_chance = random.randint(1, 5)
     if interaction_chance == 1:
         clear()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print('As you set off on your adventure you see the')
         print('small town disappear almost instantaneously.')
         print('You soon find a convey of what appears to be')
         print('knights on horses.')
         print()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print('[================== CHOICES ==================]')
         print()
@@ -616,7 +618,7 @@ def interaction():
         print('2. Approach the knights')
         print('3. Ignore the knights')
         print()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print('Use your number keys to choose')
         interaction_chance = 0
         while Exit != 1:  # Choices from Woke() loop
@@ -634,11 +636,11 @@ def interaction():
             repeated()
             gameover()
     if interaction_chance == 3 or interaction_chance == 4 or interaction_chance == 5:
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print('   You continue to your destination. safely')
         print()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
 
 
 def skeletal_knights():
@@ -682,13 +684,13 @@ def skeletal_knights():
         enemy_max_health = 200
     if interaction_chance == 1:
         clear()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print('As you get closer you realise that these are')
         print('not knights but undead knights.')
         print('They notice you and start to move towards you')
         print()
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         sleep(5)
         clear()
         attack()
@@ -698,32 +700,38 @@ def skeletal_knights():
 
 def attack():
     global enemy_health, enemy_name, enemy_attacks, health, xp
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('The', enemy_name, 'has', enemy_health, 'HP Remaining')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('The', enemy_name, 'used', random.choice(enemy_attacks))
     if enemy_health <= 0:
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print('        The', enemy_name, 'has perished')
         print()
         leveling()
         print('You now have', xp)
         print('HP:', health)
-        print('[=============================================]')
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
 
 
 def valkyrie():
 
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+
+
+def health_print():
+    global max_health
+    if health % max_health:
+        print(BColors.red, '▓')
 
 
 loopmenu()
-print('[=============================================]')
+print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
 print()
 player = input(
     "Please enter your name..."
@@ -731,11 +739,9 @@ player = input(
 print()
 while Exit != 1:
     clear()
-    print('[=============================================]')
-    print()
-    print(
-        "            Please Select a class"
-    )
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print('                                             ')
+    print('             Please Select a class             ')
     print(
         "           [Warrior] [Tank] [Scout]"
     )
@@ -748,7 +754,7 @@ while Exit != 1:
     print('Scout: Has less health and does less damage \n'
           'but is more mobile')
     print()
-    print('[=============================================]')
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     Class = input("...")
     if Class == 'Warrior' or Class == 'warrior':
