@@ -15,6 +15,5 @@
 - [x] UI Elements.
 - [ ] QOL improvements.
 - [ ] Balancing.
-- [ ] RNG.
+- [x] RNG.
 - [ ] Level based enemys.
-- [ ] Foodstuffs.
