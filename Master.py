@@ -4,32 +4,40 @@ from colorama import Fore, Back
 import pickle
 Start = 0
 Exit = 0
-health_percent = 0
-max_armor = 0
+
+dungeon = 0
+# Class Variables
+xp = 0
 max_xp = 0
 xp_percent = 0
 xp_print = ''
+level = 5
+next_lvl = 750
+health = 0
+health_percent = 0
+max_health = 200
+
+armor = 0
 armor_percent = 0
+max_armor = 0
+
+mobility = 0
+damage = 0
 currency = 150
 temp_currency = 0
 
-# Class Variables
-xp = 0
-level = 1
-next_lvl = 750
-health = 0
-max_health = 200
-armor = 0
-mobility = 0
-damage = 0
+
 # Enemy Variables
 enemy_name = 'null'
 enemy_attacks = []
+enemy_quote = []
 enemy_health = 0
 enemy_mobility = 0
 enemy_armor = 0
 enemy_attack = 0
+enemy_health_percent = 0
 enemy_max_health = 0
+enemy_health_print = ''
 
 # Input references
 Class = ''
@@ -37,8 +45,8 @@ choice = ''
 
 # Inventory
 weapons_buy = [
-    Fore.YELLOW + '1. Sharpened Iron Sword $150', '2. Iron Axe $200', '3. Sharpened Iron Axe $250', '4. Steel Sword $550',
-    '5. Sharpened Steel Sword $750', '6. Steel Axe $1000', '7. Sharpened Steel Axe $1500',
+    Fore.YELLOW + '1. Sharpened Iron Sword $150', '2. Iron Axe $200', '3. Sharpened Iron Axe $250',
+    '4. Steel Sword $550', '5. Sharpened Steel Sword $750', '6. Steel Axe $1000', '7. Sharpened Steel Axe $1500',
     '8. Obsidian Strong Sword $2500', '9. Obsidian Rapier $2500', '10.Obsidian Axe $2500' + Fore.RESET
 ]
 potions_buy = [
@@ -79,6 +87,8 @@ def health_print():
     health_percent = health * 100/200
     if health_percent >= 100:
         health_percent = 100
+    if health_percent <= 10:
+        health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
     if health_percent >= 10:
         health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
     if health_percent >= 20:
@@ -144,6 +154,7 @@ def loopmenu():
 
 def player_stats():
     clear()
+
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('Level:', level)
     health_print()
@@ -193,7 +204,7 @@ def townhall():
 
 
 def notice():
-    global choice
+    global choice, dungeon
     clear()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
@@ -220,7 +231,17 @@ def notice():
     choice = input('...')
     while Exit != 1:
         if choice == '1':
-            interaction()
+            if level >= 0:
+                dungeon = 1
+                interaction()
+                break
+        if choice == '2':
+            if level < 5:
+                print('You are not level 5 yet')
+            if level >= 5:
+                dungeon = 2
+                interaction()
+                break
         if choice == '6' or choice == 'Back' or choice == 'back':
             clear()
             townhall()
@@ -581,10 +602,39 @@ def repeated():
         player_stats()
 
 
+def skeletal_knights():
+    global enemy_health, enemy_mobility, enemy_armor, enemy_attack, enemy_max_health, enemy_name, enemy_attacks, level, \
+        enemy_quote
+    enemy_name = 'Skeletal Knight'
+    enemy_attacks = ['SKULL SMASH', 'NUMB SKULL', 'SPOOK']
+    enemy_quote = ['NYEH HEH HEH HEH', 'I HOPE YOUR IN A SKELETONNE OF PAIN', 'I JUST SMACKED YOU INTO TOMARROW',
+                   'CUT TO THE BONE', 'BONE APE TETE']
+    enemy_max_health = 75
+    enemy_health = enemy_max_health
+    enemy_mobility = 15
+    enemy_armor = 7
+    random.randint(0, 10)
+
+    clear()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print()
+    print('As you get closer you realise that these are')
+    print('not knights but undead knights.')
+    print('They notice you and start to move towards you')
+    print()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    sleep(5)
+    clear()
+    attack()
+    repeated()
+    game_over()
+
+
 def interaction():
-    global interaction_chance, choice
+    global interaction_chance, choice, dungeon
     interaction_chance = random.randint(1, 5)
-    if interaction_chance == 1:
+    if interaction_chance == 1 or interaction_chance == 2 or interaction_chance == 3 or interaction_chance == 4 \
+            or interaction_chance == 5:
         clear()
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
@@ -605,7 +655,7 @@ def interaction():
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print('Use your number keys to choose')
         interaction_chance = 0
-        while Exit != 1:  # Choices from Woke() loop
+        while Exit != 1:
             choice = input('...')
             print()
 
@@ -615,17 +665,17 @@ def interaction():
             elif choice == '2':
                 skeletal_knights()
                 break
-            if choice == '3':
+            elif choice == '3':
                 interaction_chance = random.randint(1, 2)
                 if interaction_chance == 1:
                     safe_travel()
                     break
-                if interaction_chance == 2:
+                elif interaction_chance == 2:
                     skeletal_knights()
                     break
             repeated()
             game_over()
-    if interaction_chance == 3 or interaction_chance == 4 or interaction_chance == 5:
+    elif interaction_chance == 5:
         safe_travel()
 
 
@@ -635,72 +685,68 @@ def safe_travel():
     print('   You continue to your destination. safely')
     print()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    if dungeon == 1:
+        valkyrie()
 
 
-def skeletal_knights():
-    global enemy_health, enemy_mobility, enemy_armor, enemy_attack, enemy_max_health, enemy_name, enemy_attacks
-    enemy_name = 'Skeletal Knight'
-    enemy_attacks = ['SKULL SMASH', '', 'SPOOK']
-    enemy_health = enemy_max_health
-    enemy_mobility = 15
-    enemy_armor = 7
-    random.randint(0, 10)
-    enemy_max_health = 75
-    if level >= 5:
-        enemy_health = enemy_max_health
-        enemy_mobility = 25
-        enemy_armor = 15
-        random.randint(10, 20)
-        enemy_max_health = 125
-    if level >= 15:
-        enemy_health = enemy_max_health
-        enemy_mobility = 30
-        enemy_armor = 20
-        enemy_attack = random.randint(20, 28)
-        enemy_max_health = 125
-    if level >= 25:
-        enemy_health = enemy_max_health
-        enemy_mobility = 35
-        enemy_armor = 25
-        enemy_attack = random.randint(28, 35)
-        enemy_max_health = 150
-    if level >= 35:
-        enemy_health = enemy_max_health
-        enemy_mobility = 45
-        enemy_armor = 35
-        enemy_attack = random.randint(35, 45)
-        enemy_max_health = 175
-    if level >= 45:
-        enemy_health = enemy_max_health
-        enemy_mobility = 40
-        enemy_armor = 30
-        enemy_attack = random.randint(35, 45)
-        enemy_max_health = 200
-    if interaction_chance == 1:
-        clear()
-        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-        print()
-        print('As you get closer you realise that these are')
-        print('not knights but undead knights.')
-        print('They notice you and start to move towards you')
-        print()
-        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-        sleep(5)
-        clear()
-        attack()
-        repeated()
-        game_over()
+def enemy_health_print():
+    global enemy_max_health, enemy_health_percent, enemy_health, enemy_health_print
+    enemy_health_percent = health * 100 / 200
+    if enemy_health_percent >= 100:
+        enemy_health_percent = 100
+    if enemy_health_percent <= 10:
+        enemy_health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
+    if enemy_health_percent >= 10:
+        enemy_health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
+    if enemy_health_percent >= 20:
+        enemy_health_print = (Fore.RED + '[▓▓              ]' + Fore.RESET)
+    if enemy_health_percent >= 30:
+        enemy_health_print = (Fore.RED + '[▓▓▓            ]' + Fore.RESET)
+    if enemy_health_percent >= 40:
+        enemy_health_print = (Fore.RED + '[▓▓▓▓          ]' + Fore.RESET)
+    if enemy_health_percent >= 50:
+        enemy_health_print = (Fore.RED + '[▓▓▓▓▓        ]' + Fore.RESET)
+    if enemy_health_percent >= 60:
+        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓       ]' + Fore.RESET)
+    if enemy_health_percent >= 70:
+        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓     ]' + Fore.RESET)
+    if enemy_health_percent >= 80:
+        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓    ]' + Fore.RESET)
+    if enemy_health_percent >= 90:
+        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓▓  ]' + Fore.RESET)
+    if enemy_health_percent >= 100:
+        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓▓▓]' + Fore.RESET)
 
 
 def attack():
-    global enemy_health, enemy_name, enemy_attacks, health, xp
+    global enemy_health, enemy_name, enemy_attacks, health, xp, choice
+    clear()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
-    print('The', enemy_name, 'has', enemy_health, 'HP Remaining')
+    print(enemy_name, 'Health:', health_print)
+    print('Your health:', health_print)
+    print()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print()
+    print('1. Attack')
+    print('2. Inventory')
     print()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-    print('The', enemy_name, 'used', random.choice(enemy_attacks))
+    choice = input('...')
+    while Exit != 1:
+        if choice == '1':
+            enemy_health = enemy_health - damage
+            attack_turn()
+        if choice == '2':
+            clear()
+            inventory()
+            inventory_use_item()
+            choice = input('Type back to go to the previous screen')
+            if choice == 'Back' or 'back':
+                attack()
+            break
     if enemy_health <= 0:
+        clear()
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
         print('        The', enemy_name, 'has perished')
@@ -709,11 +755,35 @@ def attack():
         print('You now have', xp)
         print('HP:', health)
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+        if dungeon == 1:
+            valkyrie()
+
+
+def attack_turn():
+    global enemy_health
+    enemy_health = enemy_health - damage
+    clear()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print()
+    print(enemy_health_print)
+
+    print('Health:', health_print)
+    print()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print('The', enemy_name, 'used', random.choice(enemy_attacks))
+    print(enemy_name, ':', random.choice(enemy_quote))
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    input('Press enter to continue')
+    repeated()
+    game_over()
+    attack()
 
 
 def valkyrie():
-
+    clear()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print()
+    print('Valkyrie fight')
     print()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
 
@@ -723,7 +793,7 @@ def armor_print():
     armor_percent = armor * 100/200
     if armor_percent >= 100:
         armor_percent = 100
-    if armor_percent >= 10:
+    if armor_percent <= 10:
         armor_print = (Fore.GREEN + '[▓              ]' + Fore.RESET)
     if armor_percent >= 20:
         armor_print = (Fore.GREEN + '[▓▓            ]' + Fore.RESET)
