@@ -23,6 +23,8 @@ max_armor = 0
 
 mobility = 0
 damage = 0
+weapon_equip = []
+armor_equip = ['None', ]
 currency = 150
 temp_currency = 0
 
@@ -56,8 +58,8 @@ potions_buy = [
 misc_buy = [
     Fore.YELLOW + '16. Explosives x1 $250' + Fore.RESET
 ]
-weapons = [Fore.RED + '', ]
-potions = [Fore.RED + 'Small Health Potion', 'Small Health Potion', 'Small Health Potion' + Fore.RESET]
+weapons = ['']
+potions = ['Small Health Potion', 'Small Health Potion', 'Small Health Potion']
 misc = ['']
 inventory = weapons + potions + misc
 inventory_count = len(inventory)
@@ -82,42 +84,13 @@ def inventory_drop_item():
         print('You Dropped a Small Health Potion')
 
 
-def health_print():
-    global max_health, health_percent, health, health_print
-    health_percent = health * 100/200
-    if health_percent >= 100:
-        health_percent = 100
-    if health_percent <= 10:
-        health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
-    if health_percent >= 10:
-        health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
-    if health_percent >= 20:
-        health_print = (Fore.RED + '[▓▓              ]' + Fore.RESET)
-    if health_percent >= 30:
-        health_print = (Fore.RED + '[▓▓▓            ]' + Fore.RESET)
-    if health_percent >= 40:
-        health_print = (Fore.RED + '[▓▓▓▓          ]' + Fore.RESET)
-    if health_percent >= 50:
-        health_print = (Fore.RED + '[▓▓▓▓▓        ]' + Fore.RESET)
-    if health_percent >= 60:
-        health_print = (Fore.RED + '[▓▓▓▓▓▓       ]' + Fore.RESET)
-    if health_percent >= 70:
-        health_print = (Fore.RED + '[▓▓▓▓▓▓▓     ]' + Fore.RESET)
-    if health_percent >= 80:
-        health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓    ]' + Fore.RESET)
-    if health_percent >= 90:
-        health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓▓  ]' + Fore.RESET)
-    if health_percent >= 100:
-        health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓▓▓]' + Fore.RESET)
-    print('Health:', health_print)
-
-
 def equip():
     global choice, damage, armor, mobility
     if choice == 'equip sharpened iron sword' or choice == 'equip sharpened iron sword' \
             or choice == 'Equip sharpened iron sword' or choice == 'Equip Sharpened Iron Sword':
         damage = 10
         mobility = mobility - 1.5
+        weapon_equip.append('Sharpened Iron Sword')
         print('You have equipped a Sharpened Iron Sword')
 
 
@@ -154,12 +127,11 @@ def loopmenu():
 
 def player_stats():
     clear()
-
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('Level:', level)
-    health_print()
-    armor_print()
-    xp_print()
+    print('Health:', health)
+    print('Armor:', armor)
+    print('XP:', xp)
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
 
 
@@ -189,6 +161,8 @@ def townhall():
     print('Use your number keys to choose')
     choice = input('...')
     while Exit != 1:
+        if choice == '':
+            townhall()
         if choice == '1':
             clear()
             notice()
@@ -230,6 +204,8 @@ def notice():
     print('Use your number keys to choose')
     choice = input('...')
     while Exit != 1:
+        if choice == '':
+            notice()
         if choice == '1':
             if level >= 0:
                 dungeon = 1
@@ -269,6 +245,8 @@ def receptionist():
     print('Use your number keys to choose')
     choice = input('...')
     while Exit != 1:
+        if choice == '':
+            receptionist()
         if choice == '1':
             clear()
             re_reply1()
@@ -295,8 +273,8 @@ def re_reply1():
     print('  at the notice board and hunt down these \n  animals.')
     print()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-    sleep(10)
-    townhall()
+    sleep(5)
+    notice()
 
 
 def re_reply2():
@@ -309,8 +287,8 @@ def re_reply2():
     print('  give.')
     print()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-    sleep(8)
-    townhall()
+    sleep(5)
+    notice()
 
 
 def woke():
@@ -336,6 +314,8 @@ def woke():
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
         print()
+        if choice == '':
+            woke()
         if choice == '1' or choice == 'market':
             shop()
             break
@@ -349,7 +329,6 @@ def woke_loop():
     global choice, currency, temp_currency
     currency = temp_currency + currency
     temp_currency = 0
-    clear()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
     print('You walk back to the Town square')
@@ -365,6 +344,8 @@ def woke_loop():
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
         print()
+        if choice == '':
+            woke_loop()
         if choice == '1':
             shop()
             break
@@ -375,28 +356,34 @@ def woke_loop():
 
 
 def inventory():
-    global inventory_count, xp
-    print()
-    print()
-    print()
-    print()
-    print()
+    global inventory_count, xp, weapon_equip
 
+    clear()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print()
+    print(Fore.YELLOW + 'Equipped Weapon: ' + Fore.RESET)
+    for weapon_e in weapon_equip:
+        print(Fore.CYAN + weapon_e + Fore.RESET)
+    print()
+    print(Fore.YELLOW + 'Equipped Armor:' + Fore.RESET)
+    for armor_e in armor_equip:
+        print(Fore.CYAN + armor_e + Fore.RESET)
+    print()
     print('▓▓▓▓▓▓▓▓▓▓▓ Your Inventory ▓▓▓▓▓▓▓▓▓▓')
-    print('Weapons:')
+    print(Fore.YELLOW + 'Weapons:' + Fore.RESET)
     for weapon in weapons:
-        print(weapon)
-    print('Potions:')
+        print(Fore.RED + weapon + Fore.RESET)
+    print(Fore.YELLOW + 'Potions:' + Fore.RESET)
     for potion in potions:
-        print(potion)
-    print('Misc:')
+        print(Fore.RED + potion + Fore.RESET)
+    print(Fore.YELLOW + 'Misc:' + Fore.RESET)
     for other in misc:
-        print(other)
+        print(other + Fore.RESET)
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓', inventory_count, '/ 25', '▓▓▓▓▓')
 
 
 def inventory_use_item():
-    global health, mobility, max_health
+    global health, mobility, max_health, choice
     if choice == 'use small health potion' or choice == 'use Small Health Potion' \
             or choice == 'Use Small Health Potion' or choice == 'Use small health potion':
         if 'Small Health Potion' in potions:
@@ -406,6 +393,7 @@ def inventory_use_item():
                 health = health + 25
                 potions.remove('Small Health Potion')
                 print('You used a Small health potion')
+                choice = ''
         else:
             print('You do not have a Small health potion')
 
@@ -486,6 +474,8 @@ def buy():
     global currency
     while Exit != 1:
         choice = input('...')
+        if choice == '':
+            shop()
         if choice == 'back' or choice == 'back':
             woke_loop()
             break
@@ -494,6 +484,10 @@ def buy():
                 weapons.append('Sharpened Iron Sword')
                 currency -= 150
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
 
         elif choice == '2':
@@ -501,66 +495,110 @@ def buy():
                 weapons.append('Iron Axe')
                 currency -= 200
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '3':
             if currency >= 250:
                 weapons.append('Sharpened Iron Axe')
                 currency -= 250
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '4':
             if currency >= 550:
                 weapons.append('Steel Sword')
                 currency -= 550
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '5':
             if currency >= 750:
                 weapons.append('Sharpened Steel Sword')
                 currency -= 750
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '6':
             if currency >= 1000:
                 weapons.append('Steel Axe')
                 currency -= 1000
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '7':
             if currency >= 1500:
                 weapons.append('Sharpened Steel Axe')
                 currency -= 1500
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '8':
             if currency >= 2500:
                 weapons.append('Obsidian Strong Sword')
                 currency -= 2500
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '9':
             if currency >= 2500:
                 weapons.append('Obsidian Strong Sword')
                 currency -= 2500
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '10':
             if currency >= 2500:
                 weapons.append('Obsidian Axe')
                 currency -= 2500
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '11':
             if currency >= 75:
                 potions.append('Small Health Potion')
                 currency -= 75
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '12':
             if currency >= 125:
                 potions.append('Medium Health Potion')
                 currency -= 125
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '13':
             if currency >= 2500:
@@ -573,18 +611,30 @@ def buy():
                 potions.append('Mobility Buff Vial')
                 currency -= 750
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '15':
             if currency >= 750:
                 potions.append('Health Buff Vial')
                 currency -= 750
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == '16':
             if currency >= 250:
                 potions.append('Explosives')
                 currency -= 250
                 clear()
+                print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+                print()
+                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print()
                 woke_loop()
         elif choice == 'Inventory' or choice == 'inventory':
             inventory()
@@ -609,7 +659,7 @@ def skeletal_knights():
     enemy_attacks = ['SKULL SMASH', 'NUMB SKULL', 'SPOOK']
     enemy_quote = ['NYEH HEH HEH HEH', 'I HOPE YOUR IN A SKELETONNE OF PAIN', 'I JUST SMACKED YOU INTO TOMARROW',
                    'CUT TO THE BONE', 'BONE APE TETE']
-    enemy_max_health = 75
+    enemy_max_health = 35
     enemy_health = enemy_max_health
     enemy_mobility = 15
     enemy_armor = 7
@@ -658,7 +708,8 @@ def interaction():
         while Exit != 1:
             choice = input('...')
             print()
-
+            if choice == '':
+                interaction()
             if choice == '1':
                 skeletal_knights()
                 break
@@ -689,62 +740,53 @@ def safe_travel():
         valkyrie()
 
 
-def enemy_health_print():
-    global enemy_max_health, enemy_health_percent, enemy_health, enemy_health_print
-    enemy_health_percent = health * 100 / 200
-    if enemy_health_percent >= 100:
-        enemy_health_percent = 100
-    if enemy_health_percent <= 10:
-        enemy_health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
-    if enemy_health_percent >= 10:
-        enemy_health_print = (Fore.RED + '[▓               ]' + Fore.RESET)
-    if enemy_health_percent >= 20:
-        enemy_health_print = (Fore.RED + '[▓▓              ]' + Fore.RESET)
-    if enemy_health_percent >= 30:
-        enemy_health_print = (Fore.RED + '[▓▓▓            ]' + Fore.RESET)
-    if enemy_health_percent >= 40:
-        enemy_health_print = (Fore.RED + '[▓▓▓▓          ]' + Fore.RESET)
-    if enemy_health_percent >= 50:
-        enemy_health_print = (Fore.RED + '[▓▓▓▓▓        ]' + Fore.RESET)
-    if enemy_health_percent >= 60:
-        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓       ]' + Fore.RESET)
-    if enemy_health_percent >= 70:
-        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓     ]' + Fore.RESET)
-    if enemy_health_percent >= 80:
-        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓    ]' + Fore.RESET)
-    if enemy_health_percent >= 90:
-        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓▓  ]' + Fore.RESET)
-    if enemy_health_percent >= 100:
-        enemy_health_print = (Fore.RED + '[▓▓▓▓▓▓▓▓▓▓]' + Fore.RESET)
+def attacks():
+    clear()
+    global choice, damage, armor
+    if Class == 'Warrior' or Class == 'warrior':
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+        print()
+        print('           [Attack]   [WhirlWind]   [Defense]')
+        print()
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
+        print()
+        print('1. Attack')
+        print('2. Whirlwind')
+        print('3. Defense')
+        print('4. Back')
+        print()
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+        choice = input('...')
+        while Exit != 1:
+            if choice == '1' or choice == 'Attack' or choice == 'attack':
+                damage = attack_1
+                attack_turn()
+                break
+            if choice == '2' or choice == 'Whirlwind' or choice == 'whirlwind':
+                damage = attack_2
+                attack_turn()
+                break
+            if choice == '3' or choice == 'Defense' or choice == 'defense':
+                armor = armor + 15
+                damage = 0
+                turn_counter = 0
+            if choice == '':
+                attacks()
+            if choice == '4' or 'Back' or 'back':
+                attack()
+                break
+
+
+def turn_counter():
+    global turn_counter, armor
+    if turn_counter == 3:
+        turn_counter = 0
+        armor = max_armor
 
 
 def attack():
     global enemy_health, enemy_name, enemy_attacks, health, xp, choice
-    clear()
-    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-    print()
-    print(enemy_name, 'Health:', health_print)
-    print('Your health:', health_print)
-    print()
-    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
-    print()
-    print('1. Attack')
-    print('2. Inventory')
-    print()
-    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-    choice = input('...')
-    while Exit != 1:
-        if choice == '1':
-            enemy_health = enemy_health - damage
-            attack_turn()
-        if choice == '2':
-            clear()
-            inventory()
-            inventory_use_item()
-            choice = input('Type back to go to the previous screen')
-            if choice == 'Back' or 'back':
-                attack()
-            break
+    game_over()
     if enemy_health <= 0:
         clear()
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
@@ -757,17 +799,59 @@ def attack():
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         if dungeon == 1:
             valkyrie()
-
-
-def attack_turn():
-    global enemy_health
-    enemy_health = enemy_health - damage
     clear()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print()
-    print(enemy_health_print)
+    print(enemy_name, 'Health:', enemy_health)
+    print('Your health:', health)
+    print()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓ CHOICES ▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print()
+    print('1. Attack')
+    print('2. Inventory')
+    print()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    choice = input('...')
+    while Exit != 1:
+        if choice == '':
+            attack()
+        if choice == '1':
+            attacks()
+            break
+        if choice == '2':
+            clear()
+            inventory()
+            inventory_use_item()
+            choice = input('Type back to go to the previous screen')
+            if choice == 'Back' or 'back':
+                attack()
+                break
 
-    print('Health:', health_print)
+
+def attack_turn():
+    global enemy_health, enemy_attack, health, damage
+    game_over()
+    enemy_attack = 20
+    enemy_health = enemy_health - damage
+    health = health - enemy_attack
+    if enemy_health <= 0:
+        clear()
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+        print()
+        print('        The', enemy_name, 'has perished')
+        print()
+        leveling()
+        print('You now have', xp)
+        print('HP:', health)
+        print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+        if dungeon == 1:
+            valkyrie()
+    clear()
+    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print()
+    print('Enemy Health:', enemy_health)
+
+    print('Health:', health)
     print()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     print('The', enemy_name, 'used', random.choice(enemy_attacks))
@@ -775,7 +859,6 @@ def attack_turn():
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
     input('Press enter to continue')
     repeated()
-    game_over()
     attack()
 
 
@@ -786,64 +869,8 @@ def valkyrie():
     print('Valkyrie fight')
     print()
     print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    choice = input('...')
 
-
-def armor_print():
-    global max_armor, armor_percent, armor, armor_print
-    armor_percent = armor * 100/200
-    if armor_percent >= 100:
-        armor_percent = 100
-    if armor_percent <= 10:
-        armor_print = (Fore.GREEN + '[▓              ]' + Fore.RESET)
-    if armor_percent >= 20:
-        armor_print = (Fore.GREEN + '[▓▓            ]' + Fore.RESET)
-    if armor_percent >= 30:
-        armor_print = (Fore.GREEN + '[▓▓▓           ]' + Fore.RESET)
-    if armor_percent >= 40:
-        armor_print = (Fore.GREEN + '[▓▓▓▓          ]' + Fore.RESET)
-    if armor_percent >= 50:
-        armor_print = (Fore.GREEN + '[▓▓▓▓▓        ]' + Fore.RESET)
-    if armor_percent >= 60:
-        armor_print = (Fore.GREEN + '[▓▓▓▓▓▓       ]' + Fore.RESET)
-    if armor_percent >= 70:
-        armor_print = (Fore.GREEN + '[▓▓▓▓▓▓▓     ]' + Fore.RESET)
-    if armor_percent >= 80:
-        armor_print = (Fore.GREEN + '[▓▓▓▓▓▓▓▓    ]' + Fore.RESET)
-    if armor_percent >= 90:
-        armor_print = (Fore.GREEN + '[▓▓▓▓▓▓▓▓▓  ]' + Fore.RESET)
-    if armor_percent >= 100:
-        armor_print = (Fore.GREEN + '[▓▓▓▓▓▓▓▓▓▓]' + Fore.RESET)
-    print('Armor: ', armor_print)
-
-
-def xp_print():
-    global max_xp, xp_percent, xp, xp_print
-    xp_percent = xp * 100/200
-    if xp_percent >= 100:
-        xp_percent = 100
-    if xp_percent <= 10:
-        xp_print = (Fore.BLUE + '[               ]' + Fore.RESET)
-    if xp_percent >= 10:
-        xp_print = (Fore.BLUE + '[▓              ]' + Fore.RESET)
-    if xp_percent >= 20:
-        xp_print = (Fore.BLUE + '[▓▓            ]' + Fore.RESET)
-    if xp_percent >= 30:
-        xp_print = (Fore.BLUE + '[▓▓▓           ]' + Fore.RESET)
-    if xp_percent >= 40:
-        xp_print = (Fore.BLUE + '[▓▓▓▓          ]' + Fore.RESET)
-    if xp_percent >= 50:
-        xp_print = (Fore.BLUE + '[▓▓▓▓▓        ]' + Fore.RESET)
-    if xp_percent >= 60:
-        xp_print = (Fore.BLUE + '[▓▓▓▓▓▓       ]' + Fore.RESET)
-    if xp_percent >= 70:
-        xp_print = (Fore.BLUE + '[▓▓▓▓▓▓▓     ]' + Fore.RESET)
-    if xp_percent >= 80:
-        xp_print = (Fore.BLUE + '[▓▓▓▓▓▓▓▓    ]' + Fore.RESET)
-    if xp_percent >= 90:
-        xp_print = (Fore.BLUE + '[▓▓▓▓▓▓▓▓▓  ]' + Fore.RESET)
-    if xp_percent >= 100:
-        xp_print = (Fore.BLUE + '[▓▓▓▓▓▓▓▓▓▓]' + Fore.RESET)
-    print('XP:    ', xp_print)
 
 
 def game_over():
@@ -851,12 +878,13 @@ def game_over():
     if health <= 0:
         health = health + 100
         temp_currency = 0
+        clear()
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
         print()
-        print('                You have DIED')
+        print('                    You have DIED')
         print()
         print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
-        sleep(10)
+        sleep(5)
         woke()
 
 
@@ -891,28 +919,35 @@ while Exit != 1:
     if Class == 'Warrior' or Class == 'warrior':
         health = 125
         armor = 25
+        max_armor = 25
         mobility = 15
+        attack_1 = random.randint(11, 15)
+        attack_2 = random.randint(7, 20)
+        attack_3 = 0
         weapons.append('Iron Sword')
+        weapon_equip.append('Iron Sword')
 
         break
     elif Class == 'Tank' or Class == 'tank':
         health = 200
         armor = 50
+        max_armor = 50
+        attack_1 = random.randint(8, 11)
+        attack_2 = 0
+        attack_3 = 0
         mobility = 5
         weapons.append('Dull Iron Sword')
+        weapon_equip.append('Dull Iron Sword')
         break
     elif Class == 'Scout' or Class == 'scout':
         health = 80
         armor = 0
+        max_armor = 0
+        attack_1 = random.randint(5, 10)
+        attack_2 = random.randint(2, 15)
         mobility = 30
         weapons.append('Iron Dagger')
-        break
-    elif Class == 'Test' or Class == 'test':
-        health = 20
-        armor = 100
-        mobility = 100
-        weapons.append('Iron Dagger')
-        weapons.append('Short Bow')
+        weapon_equip.append('Iron Dagger')
         break
 player_stats()
 woke()
