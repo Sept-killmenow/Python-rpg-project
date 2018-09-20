@@ -25,6 +25,7 @@ max_armor = 100
 mobility = 0
 damage = 0
 burn = 0
+burn_effect = 0
 weapon_equip = []
 armor_equip = ['None', ]
 currency = 150
@@ -87,7 +88,6 @@ def leveling():
 
 def health_print():
     global x, remainingHealth, health_print, current_health, health_print_max
-    health_print_max = health_print_max + 1
     text_convert = int(max_health / health_print_max)
     current_health = int(health / text_convert)
     remainingHealth = health_print_max - current_health
@@ -98,7 +98,7 @@ def health_print():
 
 def armor_print():
     global x, remainingarmor, armor_print, current_health
-    if armor > 0:
+    if armor > 1:
         armor_print_max = 10
         text_convert = int(max_armor / armor_print_max)
         current_armor = int(armor / text_convert)
@@ -107,7 +107,7 @@ def armor_print():
         armor_spacing = ''.join([' ' for x in range(remainingarmor)])
         print('Armor: ', '[' + Fore.YELLOW + armor_print + armor_spacing + Fore.RESET + ']')
     if armor == 0:
-        print('No Armor')
+        print(Fore.YELLOW + 'No Armor' + Fore.RESET)
 
 
 def inventory_drop_item():
@@ -774,7 +774,7 @@ def safe_travel():
 
 def attacks():
     clear()
-    global choice, damage, armor, turn_counter, burn_effect, move
+    global choice, damage, armor, turn_counter, burn_effect, move, attack_1, attack_2, attack_3
     if Class == 'Warrior' or Class == 'warrior':
         print('████████████████████████████████')
         print()
@@ -845,7 +845,7 @@ def attacks():
     if Class == 'Mage' or Class == 'mage':
         print('████████████████████████████████')
         print()
-        print('           [Attack]   [WhirlWind]   [Defense]')
+        print('   [Fire Ball]   [Fire Storm]   [Healing touch]')
         print()
         print('█████████████ CHOICES █████████████')
         print()
@@ -859,10 +859,12 @@ def attacks():
         while Exit != 1:
             if choice == '1' or choice == 'Fire Ball' or choice == 'fire ball':
                 damage = attack_1
+                move = 'Fire Ball'
                 attack_turn()
                 break
             if choice == '2' or choice == 'Fire Storm' or choice == 'fire storm':
                 damage = attack_2
+                move = 'Fire Storm'
                 burn = random.randint(1,10)
                 if burn == 1 or burn == 2 or burn == 3 or burn == 4 or burn == 5:
                     burn_effect = 1
@@ -871,7 +873,7 @@ def attacks():
                 attack_turn()
                 break
             if choice == '3' or choice == 'Healing Touch' or choice == 'healing touch':
-                armor = armor + 15
+                move = 'Healing Touch'
                 damage = 0
                 turn_counter = 0
             if choice == '':
@@ -900,12 +902,12 @@ def attack():
         print()
         leveling()
         print('You now have', xp)
-        print('HP:', health)
+        health_print()
         print('████████████████████████████████')
         if dungeon == 1:
             valkyrie()
     clear()
-    print('▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓')
+    print('████████████████████████████████')
     print()
     print(enemy_name, 'Health:', enemy_health)
     print('Your health:', health)
@@ -942,6 +944,8 @@ def attack_turn():
         damage = damage + 4
     if burn_effect == 0:
         damage = damage - 4
+    if damage < 0:
+        damage = 0
     health = health - enemy_attack
     enemy_health = enemy_health - damage
     if enemy_health <= 0:
@@ -960,6 +964,9 @@ def attack_turn():
     clear()
     print('████████████████████████████████')
     print(move, 'damaged', enemy_name, 'for', damage)
+    if burn_effect == 1:
+        print('The', enemy_name, 'is burning')
+        print('Burn did 4 Damage')
     print('████████████████████████████████')
     print()
     print('Enemy Health:', enemy_health)
@@ -1031,10 +1038,10 @@ while Exit != 1:
     if Class == 'Warrior' or Class == 'warrior':
         health = 125
         armor = 25
-        max_armor = 25
+        max_armor = 100
         mobility = 15
-        attack_1 = random.randint(11, 15)
-        attack_2 = random.randint(7, 20)
+        attack_1 = random.randint(5, 7)
+        attack_2 = random.randint(4, 10)
         attack_3 = 0
         weapons.append('Iron Sword')
         weapon_equip.append('Iron Sword')
@@ -1043,9 +1050,9 @@ while Exit != 1:
     elif Class == 'Tank' or Class == 'tank':
         health = 200
         armor = 50
-        max_armor = 50
-        attack_1 = random.randint(8, 11)
-        attack_2 = 0
+        max_armor = 100
+        attack_1 = random.randint(1, 3)
+        attack_2 = random.randint(1, 4)
         mobility = 5
         weapons.append('Dull Iron Sword')
         weapon_equip.append('Dull Iron Sword')
@@ -1054,9 +1061,8 @@ while Exit != 1:
         health = 80
         armor = 0
         max_armor = 0
-        attack_1 = random.randint(8, 10)
-        attack_2 = random.randint(4, 15)
-        attack_3 = health = health + random.randint(20, 25)
+        attack_1 = random.randint(4, 5)
+        attack_2 = random.randint(1, 7)
         mobility = 30
         weapons.append('Iron Dagger')
         weapon_equip.append('Iron Dagger')
