@@ -1,6 +1,6 @@
 from time import sleep
 import random
-from colorama import Fore, Back
+from colorama import Fore
 import pickle
 Start = 0
 Exit = 0
@@ -17,10 +17,13 @@ health = 0
 health_percent = 0
 max_health = 200
 health_print_max = 10
+health_print = ''
+
 
 armor = 0
 armor_percent = 0
 max_armor = 100
+armor_check = 0
 
 mobility = 0
 damage = 0
@@ -30,6 +33,7 @@ weapon_equip = []
 armor_equip = ['None', ]
 currency = 150
 temp_currency = 0
+
 
 
 # Enemy Variables
@@ -75,7 +79,7 @@ interaction_chance = ''
 
 
 def leveling():
-    global level, xp, next_lvl, max_health, health, health_percent
+    global level, xp, next_lvl, max_health, health, health_percent, health_print_max
     while xp >= next_lvl:
         level += 1
         xp = xp - next_lvl
@@ -92,8 +96,8 @@ def health_print():
     current_health = int(health / text_convert)
     remainingHealth = health_print_max - current_health
     health_print = ''.join(['█' for x in range(current_health)])
-    health_spacing = ''.join([' ' for x in range(remainingHealth)])
-    print('Health:', '[' + Fore.RED + health_print + health_spacing + Fore.RESET + ']')
+    health_spacing = ''.join(['░' for x in range(remainingHealth)])
+    print('Health:', '[' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.RESET + ']')
 
 
 def armor_print():
@@ -104,8 +108,8 @@ def armor_print():
         current_armor = int(armor / text_convert)
         remainingarmor = armor_print_max - current_armor
         armor_print = ''.join(['█' for x in range(current_armor)])
-        armor_spacing = ''.join([' ' for x in range(remainingarmor)])
-        print('Armor: ', '[' + Fore.YELLOW + armor_print + armor_spacing + Fore.RESET + ']')
+        armor_spacing = ''.join(['░' for x in range(remainingarmor)])
+        print('Armor: ', '[' + Fore.YELLOW + armor_print + Fore.WHITE + armor_spacing + ']')
     if armor == 0:
         print(Fore.YELLOW + 'No Armor' + Fore.RESET)
 
@@ -774,7 +778,7 @@ def safe_travel():
 
 def attacks():
     clear()
-    global choice, damage, armor, turn_counter, burn_effect, move, attack_1, attack_2, attack_3
+    global choice, damage, armor, turn_counter, armor_check, burn_effect, armor_count, move, attack_1, attack_2, attack_3
     if Class == 'Warrior' or Class == 'warrior':
         print('████████████████████████████████')
         print()
@@ -803,8 +807,9 @@ def attacks():
             if choice == '3' or choice == 'Defense' or choice == 'defense':
                 armor = armor + 15
                 damage = 0
-                turn_counter = 0
-                move = 'Brace'
+                armor_count = 0
+                armor_check = 1
+                move = 'Defense'
             if choice == '':
                 attacks()
             if choice == '4' or 'Back' or 'back':
@@ -825,18 +830,20 @@ def attacks():
         print('████████████████████████████████')
         choice = input('...')
         while Exit != 1:
-            if choice == '1' or choice == 'Attack' or choice == 'attack':
+            if choice == '1' or choice == 'Ground smash' or choice == 'ground smash':
+                move = 'Ground Smash'
                 damage = attack_1
                 attack_turn()
                 break
-            if choice == '2' or choice == 'Whirlwind' or choice == 'whirlwind':
+            if choice == '2' or choice == 'Rage' or choice == 'rage':
                 damage = attack_2
                 attack_turn()
                 break
-            if choice == '3' or choice == 'Defense' or choice == 'defense':
-                armor = armor + 15
+            if choice == '3' or choice == 'Brace' or choice == 'brace':
+                armor = armor + 30
                 damage = 0
-                turn_counter = 0
+                armor_count = 0
+                armor_check = 1
             if choice == '':
                 attacks()
             if choice == '4' or 'Back' or 'back':
@@ -884,16 +891,25 @@ def attacks():
 
 
 def turn_counter():
-    global turn_counter, armor, burn_effect
-    if turn_counter == 3:
+    global turn_counter, armor, burn_effect, armor_count, armor_check
+    if turn_counter >= 3:
         turn_counter = 0
         burn_effect = 0
         armor = max_armor
+    if armor_check == 1:
+        if armor_count <= 3:
+            armor_count = armor_count + 1
+        if armor_count >= 3:
+            if Class == 'tank' or Class == 'Tank':
+                armor = armor - 30
+                armor_count = 0
+                armor_check = 0
 
 
 def attack():
     global enemy_health, enemy_name, enemy_attacks, health, xp, choice
     game_over()
+    turn_counter()
     if enemy_health <= 0:
         clear()
         print('████████████████████████████████')
@@ -939,7 +955,6 @@ def attack_turn():
     global enemy_health, enemy_attack, health, damage
     game_over()
     enemy_attack = 20
-
     if burn_effect == 1:
         damage = damage + 4
     if burn_effect == 0:
@@ -969,9 +984,7 @@ def attack_turn():
         print('Burn did 4 Damage')
     print('████████████████████████████████')
     print()
-    print('Enemy Health:', enemy_health)
-
-    print('Health:', health)
+    health_print
     print()
     print('████████████████████████████████')
     print('The', enemy_name, 'used', random.choice(enemy_attacks))
