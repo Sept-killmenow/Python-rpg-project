@@ -704,7 +704,7 @@ def skeletal_knights():
     enemy_max_health = 35
     enemy_health = enemy_max_health
     enemy_mobility = 20
-    random.randint(0, 10)
+    enemy_attack = random.randint(20, 30)
     loot1 = ['Iron Axe']
     loot2 = ['Iron Axe', 'Small Health Potion']
     loot3 = ['Iron Axe', 'Medium Health Potion']
@@ -976,17 +976,15 @@ def attack():
 
 
 def attack_turn():
-    global enemy_health, enemy_attack, health, damage
+    global enemy_health, enemy_attack, health, damage, temp_currency
     game_over()
-    enemy_attack = random.randint(10, 15)
     if Class == 'Mage' or Class == 'mage':
         if burn_check == 1:
             if burn_effect == 1:
                 damage = damage + 5
             if burn_effect == 0:
                 damage = damage - 5
-
-
+    enemy_missed = 1
     enemy_health = enemy_health - damage
     if enemy_health <= 0:
         clear()
@@ -1007,13 +1005,18 @@ def attack_turn():
         health_print = ''.join(['█' for x in range(current_health)])
         health_spacing = ''.join(['░' for x in range(remainingHealth)])
         print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
-        print('You found', loot1)
+        print('You found', '25$ on the', enemy_name)
+        temp_currency = temp_currency + 25
         print(Fore.BLUE + '████████████████████████████████'+ Fore.BLACK)
         if dungeon == 1:
             valkyrie()
-    health = health - enemy_attack
     clear()
     print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+    if random.randint(1, 100) > mobility:
+        enemy_attack_percent = enemy_attack/100*armor
+        enemy_attack = enemy_attack - enemy_attack_percent
+        health = health - enemy_attack
+        enemy_missed = 0
     print(move, 'damaged', enemy_name, 'for', damage)
     if burn_effect == 1:
         print('The', enemy_name, 'is burning')
@@ -1033,8 +1036,11 @@ def attack_turn():
     health_spacing = ''.join(['░' for x in range(remaining_enemy_health)])
     print('Enemy Health:', '[' + Fore.MAGENTA + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
     print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-    print('The', enemy_name, 'used', random.choice(enemy_attacks))
-    print(enemy_name, ':', random.choice(enemy_quote))
+    if enemy_missed == 0:
+        print('The', enemy_name, 'used', random.choice(enemy_attacks))
+        print(enemy_name, ':', random.choice(enemy_quote))
+    if enemy_missed == 1:
+        print(enemy_name, 'missed')
     print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     input('Press enter to continue')
     repeated()
