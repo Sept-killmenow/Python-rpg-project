@@ -7,13 +7,14 @@
 - [ ] Dungeon writing.
 - [ ] Enemy writing.
 - [ ] Weapon writing.
-- [ ] Turn based combat.
+- [x] Turn based combat.
 - [x] Inventory.
 - [x] XP system.
 - [x] Shopping system.
 - [ ] Quest system.
 - [x] UI Elements.
-- [ ] QOL improvements.
+- [x] QOL improvements.
 - [ ] Balancing.
 - [x] RNG.
 - [ ] Level based enemys.
+- [ ] Save/loading system.
