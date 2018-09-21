@@ -28,12 +28,13 @@ armor_check = 0
 mobility = 0
 damage = 0
 burn = 0
+burn_check = 0
 burn_effect = 0
+turn_counter = 0
 weapon_equip = []
 armor_equip = ['None', ]
 currency = 150
 temp_currency = 0
-
 
 
 # Enemy Variables
@@ -47,28 +48,30 @@ enemy_attack = 0
 enemy_health_percent = 0
 enemy_max_health = 0
 enemy_health_print = ''
+enemy_health_print_max = 10
+move = ''
 
 # Loot pool
-loot1 = []
-loot2 = []
-loot3 = []
-loot4 = []
+loot1 = ['']
+loot2 = ['']
+loot3 = ['']
+loot4 = ['']
 # Input references
 Class = ''
 choice = ''
 
 # Inventory
 weapons_buy = [
-    Fore.YELLOW + '1. Sharpened Iron Sword $150', '2. Iron Axe $200', '3. Sharpened Iron Axe $250',
+    Fore.BLACK + '1. Sharpened Iron Sword $150', '2. Iron Axe $200', '3. Sharpened Iron Axe $250',
     '4. Steel Sword $550', '5. Sharpened Steel Sword $750', '6. Steel Axe $1000', '7. Sharpened Steel Axe $1500',
-    '8. Obsidian Strong Sword $2500', '9. Obsidian Rapier $2500', '10.Obsidian Axe $2500' + Fore.RESET
+    '8. Obsidian Strong Sword $2500', '9. Obsidian Rapier $2500', '10.Obsidian Axe $2500' + Fore.BLACK
 ]
 potions_buy = [
-    Fore.YELLOW + '11. Small Health Potion $75', '12. Medium Health Potion $125', '13. Large Health Potion $200',
-    '14. Mobility Buff Vial $750', '15. Health Buff Vial $750' + Fore.RESET
+    Fore.BLACK + '11. Small Health Potion $75', '12. Medium Health Potion $125', '13. Large Health Potion $200',
+    '14. Mobility Buff Vial $750', '15. Health Buff Vial $750' + Fore.BLACK
 ]
 misc_buy = [
-    Fore.YELLOW + '16. Explosives x1 $250' + Fore.RESET
+    '16. Explosives x1 $250' + Fore.BLACK
 ]
 weapons = ['']
 potions = ['Small Health Potion', 'Small Health Potion', 'Small Health Potion']
@@ -97,7 +100,7 @@ def health_print():
     remainingHealth = health_print_max - current_health
     health_print = ''.join(['█' for x in range(current_health)])
     health_spacing = ''.join(['░' for x in range(remainingHealth)])
-    print('Health:', '[' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.RESET + ']')
+    print('Health:', '[' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
 
 
 def armor_print():
@@ -109,9 +112,9 @@ def armor_print():
         remainingarmor = armor_print_max - current_armor
         armor_print = ''.join(['█' for x in range(current_armor)])
         armor_spacing = ''.join(['░' for x in range(remainingarmor)])
-        print('Armor: ', '[' + Fore.YELLOW + armor_print + Fore.WHITE + armor_spacing + ']')
+        print('Armor: ', '[' + Fore.YELLOW + armor_print + Fore.RESET + armor_spacing + Fore.BLACK + ']' )
     if armor == 0:
-        print(Fore.YELLOW + 'No Armor' + Fore.RESET)
+        print(Fore.YELLOW + 'No Armor' + Fore.BLACK)
 
 
 def inventory_drop_item():
@@ -137,18 +140,18 @@ def clear():
 
 def menu():
         clear()
-        print(Fore.RESET + '████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
-        print("               Ara: The Epic Tale    ")
+        print(Fore.BLACK + "               Ara: The Epic Tale    ")
         print()
-        print('████████████████████████████████')
-        print('\n', '                 Instructions','\n\n', '1. To navigate menus and UI you shall type\n '
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+        print(Fore.BLACK + '\n', '                 Instructions','\n\n', '1. To navigate menus and UI you shall type\n '
                                                              'out what the option is. Do not click on it'
                             '\n\n 2. Try not to cheat thanks\n\n 3. Type Inventory at any\n input to open the'
                             ' inventory\n\n', '4. Type Start to begin', '\n\n',
               '5. To drop a item type Drop [item name]\n\n',
               )
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
 
 
@@ -164,18 +167,18 @@ def loopmenu():
 
 def player_stats():
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print('Level:', level)
     health_print()
     armor_print()
     print('XP:', xp)
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
 
 
 def townhall():
     global choice
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print(
         'You stand at the town hall entrance and'
@@ -187,13 +190,13 @@ def townhall():
         'what do you do.'
         )
     print()
-    print('█████████████ CHOICES █████████████')
+    print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
     print()
     print('  1. Check the notice board')
     print('  2. Talk to the Receptionist')
     print('  3. Go Back to the Town square')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('Use your number keys to choose')
     choice = input('...')
@@ -217,7 +220,7 @@ def townhall():
 def notice():
     global choice, dungeon
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('              TOWN NOTICE BOARD')
     print()
@@ -225,9 +228,9 @@ def notice():
     print('     [Polyphemus The Cyclops] [Drakontos]')
     print('           [Explore the wilderness]')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
-    print('█████████████ CHOICES █████████████')
+    print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
     print()
     print('  1. Attempt to Banish the Valkyrie')
     print('  2. Try to Slay The Hydra of Lerna')
@@ -236,7 +239,7 @@ def notice():
     print('  5. Explore the wilderness')
     print('  6. Walk back to the entrance ')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('Use your number keys to choose')
     choice = input('...')
@@ -265,19 +268,19 @@ def notice():
 def receptionist():
     global choice
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('  Hey there what would you like to know?     ')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('  1. Where am i?')
     print('  2. What can i do around here?')
     print('  3. Im fine thank you.')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('Use your number keys to choose')
     choice = input('...')
@@ -298,7 +301,7 @@ def receptionist():
 
 
 def re_reply1():
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('  Oh, you are in sanctuary.')
     sleep(1)
@@ -309,13 +312,13 @@ def re_reply1():
     print('  if you could, please take some time to look')
     print('  at the notice board and hunt down these \n  animals.')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     sleep(5)
     notice()
 
 
 def re_reply2():
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('  Well you could start by taking a look')
     print('  at the notice board.')
@@ -323,7 +326,7 @@ def re_reply2():
     print('  We would appreciate any help you are able to')
     print('  give.')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     sleep(5)
     notice()
 
@@ -341,13 +344,13 @@ def woke():
         'by a large market a Town hall.'
     )
     print()
-    print('█████████████ CHOICES █████████████')
+    print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
     print()
     print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
         print()
@@ -366,17 +369,17 @@ def woke_loop():
     global choice, currency, temp_currency
     currency = temp_currency + currency
     temp_currency = 0
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('You walk back to the Town square')
     print()
-    print('█████████████ CHOICES █████████████')
+    print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
     print()
     print('Where would you like to go:')
     print('1. The Market')
     print('2. The Town Hall')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print('Use your number keys to choose')
     while Exit != 1:  # Choices from Woke() loop
         choice = input('...')
@@ -396,27 +399,27 @@ def inventory():
     global inventory_count, xp, weapon_equip
 
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
-    print(Fore.YELLOW + 'Equipped Weapon: ' + Fore.RESET)
+    print(Fore.YELLOW + 'Equipped Weapon: ' + Fore.BLACK)
     for weapon_e in weapon_equip:
-        print(Fore.CYAN + weapon_e + Fore.RESET)
+        print(Fore.CYAN + weapon_e + Fore.BLACK)
     print()
-    print(Fore.YELLOW + 'Equipped Armor:' + Fore.RESET)
+    print(Fore.YELLOW + 'Equipped Armor:' + Fore.BLACK)
     for armor_e in armor_equip:
-        print(Fore.CYAN + armor_e + Fore.RESET)
+        print(Fore.CYAN + armor_e + Fore.BLACK)
     print()
-    print('███████████ Your Inventory ██████████')
-    print(Fore.YELLOW + 'Weapons:' + Fore.RESET)
+    print(Fore.BLUE + '███████████ Your Inventory ██████████' + Fore.BLACK)
+    print(Fore.YELLOW + 'Weapons:' + Fore.BLACK)
     for weapon in weapons:
-        print(Fore.RED + weapon + Fore.RESET)
-    print(Fore.YELLOW + 'Potions:' + Fore.RESET)
+        print(Fore.BLACK + weapon + Fore.BLACK)
+    print(Fore.YELLOW + 'Potions:' + Fore.BLACK)
     for potion in potions:
-        print(Fore.RED + potion + Fore.RESET)
-    print(Fore.YELLOW + 'Misc:' + Fore.RESET)
+        print(Fore.BLACK + potion + Fore.BLACK)
+    print(Fore.YELLOW + 'Misc:' + Fore.BLACK)
     for other in misc:
-        print(other + Fore.RESET)
-    print('█████████████████████', inventory_count, '/ 25', '█████')
+        print(other + Fore.BLACK)
+    print(Fore.BLUE + '█████████████████████' + Fore.BLACK, inventory_count,  '/ 25', Fore.BLUE + '█████' + Fore.BLACK)
 
 
 def inventory_use_item():
@@ -430,6 +433,8 @@ def inventory_use_item():
                 health = health + 25
                 potions.remove('Small Health Potion')
                 print('You used a Small health potion')
+                if health > max_health:
+                    health = max_health
                 choice = ''
         else:
             print('You do not have a Small health potion')
@@ -479,12 +484,12 @@ def shop():
     print()
     print()
 
-    print('██████████████ Shop ██████████████')
+    print(Fore.BLUE + '██████████████ Shop ██████████████' + Fore.BLACK)
     health = health - 50
     print('How do you do stranger would '
           '\nyou like to browse my wares?')
     print('You have', currency, 'dollars')
-    print(Fore.RED + 'Weapons:' + Fore.RESET)
+    print(Fore.RED + 'Weapons:' + Fore.BLACK)
     if Class == 'Tank' or Class == 'tank' \
             or Class == 'Warrior' or Class == 'warrior' or Class == 'Mage' or Class == 'mage':
         for weapons_b in weapons_buy:
@@ -492,13 +497,13 @@ def shop():
 
     if Class == 'Warrior' or Class == 'warrior' \
             or Class == 'Tank' or Class == 'tank' or Class == 'Mage' or Class == 'mage':
-        print(Fore.RED + 'Potions:' + Fore.RESET)
+        print(Fore.RED + 'Potions:' + Fore.BLACK)
         for potion_buy in potions_buy:
             print(potion_buy)
-    print(Fore.RED + 'Misc:' + Fore.RESET)
+    print(Fore.RED + 'Misc:' + Fore.BLACK)
     for miscs_buy in misc_buy:
         print(miscs_buy)
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print('If you would like to buy something')
     print('Or if you would like to return'
           '\nto the Town square type Back')
@@ -521,9 +526,9 @@ def buy():
                 weapons.append('Sharpened Iron Sword')
                 currency -= 150
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
 
@@ -532,9 +537,9 @@ def buy():
                 weapons.append('Iron Axe')
                 currency -= 200
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '3':
@@ -542,9 +547,9 @@ def buy():
                 weapons.append('Sharpened Iron Axe')
                 currency -= 250
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '4':
@@ -552,9 +557,9 @@ def buy():
                 weapons.append('Steel Sword')
                 currency -= 550
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '5':
@@ -562,9 +567,9 @@ def buy():
                 weapons.append('Sharpened Steel Sword')
                 currency -= 750
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '6':
@@ -572,9 +577,9 @@ def buy():
                 weapons.append('Steel Axe')
                 currency -= 1000
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '7':
@@ -582,9 +587,9 @@ def buy():
                 weapons.append('Sharpened Steel Axe')
                 currency -= 1500
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '8':
@@ -592,9 +597,9 @@ def buy():
                 weapons.append('Obsidian Strong Sword')
                 currency -= 2500
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '9':
@@ -602,9 +607,9 @@ def buy():
                 weapons.append('Obsidian Strong Sword')
                 currency -= 2500
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '10':
@@ -612,9 +617,9 @@ def buy():
                 weapons.append('Obsidian Axe')
                 currency -= 2500
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '11':
@@ -622,9 +627,9 @@ def buy():
                 potions.append('Small Health Potion')
                 currency -= 75
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '12':
@@ -632,9 +637,9 @@ def buy():
                 potions.append('Medium Health Potion')
                 currency -= 125
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '13':
@@ -648,9 +653,9 @@ def buy():
                 potions.append('Mobility Buff Vial')
                 currency -= 750
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '15':
@@ -658,9 +663,9 @@ def buy():
                 potions.append('Health Buff Vial')
                 currency -= 750
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == '16':
@@ -668,9 +673,9 @@ def buy():
                 potions.append('Explosives')
                 currency -= 250
                 clear()
-                print('████████████████████████████████')
+                print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
                 print()
-                print(Fore.YELLOW, 'Purchase successful', Fore.RESET)
+                print(Fore.YELLOW, 'Purchase successful', Fore.BLACK)
                 print()
                 woke_loop()
         elif choice == 'Inventory' or choice == 'inventory':
@@ -690,8 +695,8 @@ def repeated():
 
 
 def skeletal_knights():
-    global enemy_health, enemy_mobility, enemy_armor, enemy_attack, enemy_max_health, enemy_name, enemy_attacks, level, \
-        enemy_quote
+    global enemy_health, loot1, loot2, loot3, loot4, enemy_mobility, enemy_armor, enemy_attack, enemy_max_health, \
+        enemy_name, enemy_attacks, level, enemy_quote
     enemy_name = 'Skeletal Knight'
     enemy_attacks = ['SKULL SMASH', 'NUMB SKULL', 'SPOOK']
     enemy_quote = ['NYEH HEH HEH HEH', 'I HOPE YOUR IN A SKELETONNE OF PAIN', 'I JUST SMACKED YOU INTO TOMARROW',
@@ -700,15 +705,19 @@ def skeletal_knights():
     enemy_health = enemy_max_health
     enemy_mobility = 20
     random.randint(0, 10)
+    loot1 = ['Iron Axe']
+    loot2 = ['Iron Axe', 'Small Health Potion']
+    loot3 = ['Iron Axe', 'Medium Health Potion']
+    loot4 = ['Steel Axe', 'Small Health Potion']
 
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('As you get closer you realise that these are')
     print('not knights but undead knights.')
     print('They notice you and start to move towards you')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     sleep(5)
     clear()
     attack()
@@ -722,23 +731,23 @@ def interaction():
     if interaction_chance == 1 or interaction_chance == 2 or interaction_chance == 3 or interaction_chance == 4 \
             or interaction_chance == 5:
         clear()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
         print('As you set off on your adventure you see the')
         print('small town disappear almost instantaneously.')
         print('You soon find a convey of what appears to be')
         print('knights on horses.')
         print()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
-        print('█████████████ CHOICES █████████████')
+        print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
         print()
         print('What would you like to do:')
         print('1. Attack the knights')
         print('2. Approach the knights')
         print('3. Ignore the knights')
         print()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print('Use your number keys to choose')
         interaction_chance = 0
         while Exit != 1:
@@ -767,31 +776,31 @@ def interaction():
 
 
 def safe_travel():
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('   You continue to your destination. safely')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     if dungeon == 1:
         valkyrie()
 
 
 def attacks():
     clear()
-    global choice, damage, armor, turn_counter, armor_check, burn_effect, armor_count, move, attack_1, attack_2, attack_3
+    global choice, damage, armor, turn_counter, burn_check, armor_check, burn_effect, armor_count, move, attack_1, attack_2, attack_3
     if Class == 'Warrior' or Class == 'warrior':
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
         print('    [Sword Throw]   [WhirlWind]   [Defense]')
         print()
-        print('█████████████ CHOICES █████████████')
+        print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
         print()
         print('1. Sword Throw')
         print('2. Whirlwind')
         print('3. Defense')
         print('4. Back')
         print()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         choice = input('...')
         while Exit != 1:
             if choice == '1' or choice == 'Sword throw' or choice == 'sword throw':
@@ -816,18 +825,18 @@ def attacks():
                 attack()
                 break
     if Class == 'Tank' or Class == 'tank':
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
         print('      [Ground Smash]   [Rage]   [Brace]')
         print()
-        print('█████████████ CHOICES █████████████')
+        print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
         print()
         print('1. Ground smash')
         print('2. Rage')
         print('3. Brace')
         print('4. Back')
         print()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         choice = input('...')
         while Exit != 1:
             if choice == '1' or choice == 'Ground smash' or choice == 'ground smash':
@@ -850,18 +859,18 @@ def attacks():
                 attack()
                 break
     if Class == 'Mage' or Class == 'mage':
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
         print('   [Fire Ball]   [Fire Storm]   [Healing touch]')
         print()
-        print('█████████████ CHOICES █████████████')
+        print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
         print()
         print('1. Fire Ball')
         print('2. Fire Storm')
         print('3. Healing Touch')
         print('4. Back')
         print()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         choice = input('...')
         while Exit != 1:
             if choice == '1' or choice == 'Fire Ball' or choice == 'fire ball':
@@ -872,8 +881,9 @@ def attacks():
             if choice == '2' or choice == 'Fire Storm' or choice == 'fire storm':
                 damage = attack_2
                 move = 'Fire Storm'
-                burn = random.randint(1,10)
+                burn = random.randint(1, 10)
                 if burn == 1 or burn == 2 or burn == 3 or burn == 4 or burn == 5:
+                    burn_check = 1
                     burn_effect = 1
                 if burn == 6 or burn == 7 or burn == 8 or burn == 9 or burn == 10:
                     burn_effect = 0
@@ -890,8 +900,10 @@ def attacks():
                 break
 
 
-def turn_counter():
-    global turn_counter, armor, burn_effect, armor_count, armor_check
+def attack():
+    global enemy_health, enemy_name, enemy_attacks, health, xp, choice, turn_counter,\
+        armor, burn_effect, armor_count, armor_check
+    game_over()
     if turn_counter >= 3:
         turn_counter = 0
         burn_effect = 0
@@ -900,40 +912,51 @@ def turn_counter():
         if armor_count <= 3:
             armor_count = armor_count + 1
         if armor_count >= 3:
-            if Class == 'tank' or Class == 'Tank':
-                armor = armor - 30
-                armor_count = 0
-                armor_check = 0
-
-
-def attack():
-    global enemy_health, enemy_name, enemy_attacks, health, xp, choice
-    game_over()
-    turn_counter()
+            armor = armor - 30
+            armor_count = 0
+            armor_check = 0
     if enemy_health <= 0:
         clear()
-        print('████████████████████████████████')
+        global x, remainingHealth, current_health, health_print_max, \
+            remaining_enemy_health, enemy_health_print, enemy_current_health, enemy_health_print_max
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
         print('        The', enemy_name, 'has perished')
         print()
+        text_convert = int(max_health / health_print_max)
+        current_health = int(health / text_convert)
+        remainingHealth = health_print_max - current_health
+        health_print = ''.join(['█' for x in range(current_health)])
+        health_spacing = ''.join(['░' for x in range(remainingHealth)])
+        print('Health:', '[' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
         leveling()
         print('You now have', xp)
-        health_print()
-        print('████████████████████████████████')
+        repeated()
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         if dungeon == 1:
             valkyrie()
     clear()
-    print('████████████████████████████████')
-    print()
-    print(enemy_name, 'Health:', enemy_health)
-    print('Your health:', health)
-    print()
-    print('█████████████ CHOICES █████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+
+    text_convert = int(max_health / health_print_max)
+    current_health = int(health / text_convert)
+    remainingHealth = health_print_max - current_health
+    health_print = ''.join(['█' for x in range(current_health)])
+    health_spacing = ''.join(['░' for x in range(remainingHealth)])
+    print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
+    text_convert = int(enemy_max_health / enemy_health_print_max)
+    enemy_current_health = int(enemy_health / text_convert)
+    remaining_enemy_health = enemy_health_print_max - enemy_current_health
+    health_print = ''.join(['█' for x in range(enemy_current_health)])
+    health_spacing = ''.join(['░' for x in range(remaining_enemy_health)])
+    print('Enemy Health:', '[' + Fore.MAGENTA + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
+
+    print(Fore.BLUE + '█████████████ CHOICES █████████████' + Fore.BLACK)
     print()
     print('1. Attack')
     print('2. Inventory')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     choice = input('...')
     while Exit != 1:
         if choice == '':
@@ -941,7 +964,7 @@ def attack():
         if choice == '1':
             attacks()
             break
-        if choice == '2':
+        if choice == '2' or choice == 'Inventory' or choice == 'inventory':
             clear()
             inventory()
             inventory_use_item()
@@ -949,59 +972,83 @@ def attack():
             if choice == 'Back' or 'back':
                 attack()
                 break
+        inventory_use_item()
 
 
 def attack_turn():
     global enemy_health, enemy_attack, health, damage
     game_over()
-    enemy_attack = 20
-    if burn_effect == 1:
-        damage = damage + 4
-    if burn_effect == 0:
-        damage = damage - 4
-    if damage < 0:
-        damage = 0
-    health = health - enemy_attack
+    enemy_attack = random.randint(10, 15)
+    if Class == 'Mage' or Class == 'mage':
+        if burn_check == 1:
+            if burn_effect == 1:
+                damage = damage + 5
+            if burn_effect == 0:
+                damage = damage - 5
+
+
     enemy_health = enemy_health - damage
     if enemy_health <= 0:
         clear()
-        print('████████████████████████████████')
+        health = health + 15
+        if health > max_health:
+            health = max_health
+        print(Fore.BLUE + '████████████████████████████████'+ Fore.BLACK)
         print()
         print('        The', enemy_name, 'has perished')
         print()
         leveling()
         print('You now have', xp)
-        print('HP:', health)
+        global x, remainingHealth, health_print, current_health, health_print_max, \
+            remaining_enemy_health, enemy_health_print, enemy_current_health, enemy_health_print_max
+        text_convert = int(max_health / health_print_max)
+        current_health = int(health / text_convert)
+        remainingHealth = health_print_max - current_health
+        health_print = ''.join(['█' for x in range(current_health)])
+        health_spacing = ''.join(['░' for x in range(remainingHealth)])
+        print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
         print('You found', loot1)
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████'+ Fore.BLACK)
         if dungeon == 1:
             valkyrie()
+    health = health - enemy_attack
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print(move, 'damaged', enemy_name, 'for', damage)
     if burn_effect == 1:
         print('The', enemy_name, 'is burning')
         print('Burn did 4 Damage')
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
-    health_print
-    print()
-    print('████████████████████████████████')
+    text_convert = int(max_health / health_print_max)
+    current_health = int(health / text_convert)
+    remainingHealth = health_print_max - current_health
+    health_print = ''.join(['█' for x in range(current_health)])
+    health_spacing = ''.join(['░' for x in range(remainingHealth)])
+    print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
+    text_convert = int(enemy_max_health / enemy_health_print_max)
+    enemy_current_health = int(enemy_health / text_convert)
+    remaining_enemy_health = enemy_health_print_max - enemy_current_health
+    health_print = ''.join(['█' for x in range(enemy_current_health)])
+    health_spacing = ''.join(['░' for x in range(remaining_enemy_health)])
+    print('Enemy Health:', '[' + Fore.MAGENTA + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print('The', enemy_name, 'used', random.choice(enemy_attacks))
     print(enemy_name, ':', random.choice(enemy_quote))
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     input('Press enter to continue')
     repeated()
     attack()
 
 
 def valkyrie():
+    sleep(10)
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('Valkyrie fight')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     choice = input('...')
 
 
@@ -1011,17 +1058,17 @@ def game_over():
         health = health + 100
         temp_currency = 0
         clear()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
         print('                You have DIED')
         print()
-        print('████████████████████████████████')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         sleep(5)
         woke()
 
 
 loopmenu()
-print('████████████████████████████████')
+print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
 print()
 player = input(
     "Please enter your name..."
@@ -1029,7 +1076,7 @@ player = input(
 print()
 while Exit != 1:
     clear()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print('                                             ')
     print('             Please Select a class             ')
     print(
@@ -1044,12 +1091,12 @@ while Exit != 1:
     print('Mage: Has less health and does less damage \n'
           'but is more mobile')
     print()
-    print('████████████████████████████████')
+    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     Class = input("...")
     clear()
     if Class == 'Warrior' or Class == 'warrior':
-        health = 125
+        health = 200
         armor = 25
         max_armor = 100
         mobility = 15
@@ -1064,18 +1111,18 @@ while Exit != 1:
         health = 200
         armor = 50
         max_armor = 100
-        attack_1 = random.randint(1, 3)
-        attack_2 = random.randint(1, 4)
+        attack_1 = random.randint(2, 5)
+        attack_2 = random.randint(1, 6)
         mobility = 5
         weapons.append('Dull Iron Sword')
         weapon_equip.append('Dull Iron Sword')
         break
     elif Class == 'Mage' or Class == 'mage':
-        health = 80
+        health = 200
         armor = 0
         max_armor = 0
-        attack_1 = random.randint(4, 5)
-        attack_2 = random.randint(1, 7)
+        attack_1 = random.randint(7, 8)
+        attack_2 = random.randint(6, 11)
         mobility = 30
         weapons.append('Iron Dagger')
         weapon_equip.append('Iron Dagger')
