@@ -20,7 +20,7 @@ burn_effect = 0
 armor_equip = ['None', ]
 temp_currency = 0
 current_mobility = 0
-dungeon = 0
+dungeon = 1
 Exit = 0
 
 # Player
@@ -40,6 +40,7 @@ enemy_name = 'null'
 enemy_attacks = []
 enemy_quote = []
 enemy_health = 0
+enemy_xp = 0
 enemy_mobility = 0
 enemy_armor = 0
 enemy_attack = 0
@@ -47,8 +48,15 @@ enemy_health_percent = 0
 enemy_max_health = 0
 enemy_health_print = ''
 enemy_health_print_max = 10
+enemy_missed = 0
 move = ''
 x = ''
+
+# dungeon variables
+first_loop = 0
+first_loop_stop = 0
+first_loop_v = 0
+enemy_count = 0
 
 # Loot pool
 loot1 = ['']
@@ -87,7 +95,7 @@ def leveling():
     global level, xp, next_lvl, max_health, health, health_percent, health_print_max
     while xp >= next_lvl:
         level += 1
-        xp = xp - next_lvl
+        xp = 0
         next_lvl = round(next_lvl * 1.5)
         max_health = max_health + 10
         health = max_health
@@ -101,7 +109,7 @@ def health_print():
     current_health = int(health / text_convert)
     remainingHealth = health_print_max - current_health
     health_print = ''.join(['█' for x in range(current_health)])
-    health_spacing = ''.join(['░' for x in range(remainingHealth)])
+    health_spacing = ''.join(['█' for x in range(remainingHealth)])
     print('Health:', '[' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
 
 
@@ -113,7 +121,7 @@ def armor_print():
         current_armor = int(armor / text_convert)
         remaining_armor = armor_print_max - current_armor
         armor_print = ''.join(['█' for x in range(current_armor)])
-        armor_spacing = ''.join(['░' for x in range(remaining_armor)])
+        armor_spacing = ''.join(['█' for x in range(remaining_armor)])
         print('Armor: ', '[' + Fore.YELLOW + armor_print + Fore.RESET + armor_spacing + Fore.BLACK + ']')
     if armor == 0:
         print(Fore.YELLOW + 'No Armor' + Fore.BLACK)
@@ -295,7 +303,7 @@ def notice():
                 break
         if choice == '2':
             if level < 5:
-                print('You are not level 5 yet')
+                print('You must be level 5 to try this quest yet')
             if level >= 5:
                 dungeon = 2
                 interaction()
@@ -744,8 +752,9 @@ def repeated():
 
 def skeletal_knights():
     global enemy_health, loot1, loot2, loot3, loot4, enemy_mobility, enemy_armor, enemy_attack, enemy_max_health, \
-        enemy_name, enemy_attacks, level, enemy_quote
+        enemy_name, enemy_attacks, level, enemy_quote, enemy_xp
     enemy_name = 'Skeletal Knight'
+    enemy_xp = 25
     enemy_attacks = ['SKULL SMASH', 'NUMB SKULL', 'SPOOK']
     enemy_quote = ['NYEH HEH HEH HEH', 'I HOPE YOUR IN A SKELETONNE OF PAIN', 'I JUST SMACKED YOU INTO TOMARROW',
                    'CUT TO THE BONE', 'BONE APE TETE']
@@ -776,8 +785,7 @@ def skeletal_knights():
 def interaction():
     global interaction_chance, choice, dungeon
     interaction_chance = random.randint(1, 5)
-    if interaction_chance == 1 or interaction_chance == 2 or interaction_chance == 3 or interaction_chance == 4 \
-            or interaction_chance == 5:
+    if interaction_chance == 1 or interaction_chance == 2 or interaction_chance == 3 or interaction_chance == 4:
         clear()
         print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
@@ -825,11 +833,13 @@ def interaction():
 
 
 def safe_travel():
+    global first_loop_v
     print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
     print()
     print('   You continue to your destination. safely')
     print()
     print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+    first_loop_v = 0
     if dungeon == 1:
         valkyrie()
 
@@ -954,7 +964,7 @@ def attacks():
 
 def attack():
     global enemy_health, enemy_name, enemy_attacks, health, xp, choice, turn_counter,\
-        armor, burn_effect, armor_count, armor_check
+        armor, burn_effect, armor_count, armor_check, enemy_count, temp_currency, health_print, remainingHealth, current_health
     game_over()
     if turn_counter >= 3:
         turn_counter = 0
@@ -969,21 +979,26 @@ def attack():
             armor_check = 0
     if enemy_health <= 0:
         clear()
-        global x, remainingHealth, current_health, health_print_max, health_print, remaining_enemy_health, \
-            enemy_health_print, enemy_current_health, enemy_health_print_max
+        health = health + 15
+        xp = xp + enemy_xp
+        if health > max_health:
+            health = max_health
         print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
         print('        The', enemy_name, 'has perished')
         print()
+        leveling()
+        print('You now have', xp, 'XP')
         text_convert = int(max_health / health_print_max)
         current_health = int(health / text_convert)
         remainingHealth = health_print_max - current_health
         health_print = ''.join(['█' for x in range(current_health)])
         health_spacing = ''.join(['░' for x in range(remainingHealth)])
-        print('Health:', '[' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
-        leveling()
-        print('You now have', xp)
-        repeated()
+        print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
+        print('You found', '25$ on the', enemy_name)
+        temp_currency = temp_currency + 25
+        if enemy_count > 0:
+            enemy_count = enemy_count - 1
         print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         if dungeon == 1:
             valkyrie()
@@ -1029,86 +1044,117 @@ def attack():
 
 
 def attack_turn():
-    global enemy_health, enemy_attack, health, damage, temp_currency, x, remainingHealth, health_print, current_health, health_print_max, \
-            remaining_enemy_health, enemy_health_print, enemy_current_health, enemy_health_print_max
+    global enemy_health, enemy_attack, health, damage, temp_currency, x, xp, remainingHealth, health_print, current_health, health_print_max, \
+            remaining_enemy_health, enemy_health_print, enemy_count, enemy_current_health, enemy_health_print_max, first_loop_stop, first_loop_v
     game_over()
-    if Class == 'Mage' or Class == 'mage':
-        if burn_check == 1:
-            if burn_effect == 1:
-                damage = damage + 5
-            if burn_effect == 0:
-                damage = damage - 5
-    enemy_missed = 1
-    enemy_health = enemy_health - damage
-    if enemy_health <= 0:
+    if first_loop_stop == 0:
+        if first_loop_v == 0:
+            first_loop_v = 0
+            first_loop_stop = 1
+    if first_loop_stop == 1:
+        if Class == 'Mage' or Class == 'mage':
+            if burn_check == 1:
+                if burn_effect == 1:
+                    damage = damage + 5
+                if burn_effect == 0:
+                    damage = damage - 5
+        enemy_missed = 1
+        enemy_health = enemy_health - damage
+        if enemy_health <= 0:
+            clear()
+            health = health + 15
+            xp = xp + enemy_xp
+            if health > max_health:
+                health = max_health
+            print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+            print()
+            print('        The', enemy_name, 'has perished')
+            print()
+            leveling()
+            print('You now have', xp, 'XP')
+            text_convert = int(max_health / health_print_max)
+            current_health = int(health / text_convert)
+            remainingHealth = health_print_max - current_health
+            health_print = ''.join(['█' for x in range(current_health)])
+            health_spacing = ''.join(['░' for x in range(remainingHealth)])
+            print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
+            print('You found', '25$ on the', enemy_name)
+            temp_currency = temp_currency + 25
+            if enemy_count > 0:
+                enemy_count = enemy_count - 1
+            print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+            if dungeon == 1:
+                valkyrie()
         clear()
-        health = health + 15
-        if health > max_health:
-            health = max_health
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+        if random.randint(1, 100) > mobility:
+            enemy_attack_percent = enemy_attack/100*armor
+            enemy_attack = enemy_attack - enemy_attack_percent
+            health = health - enemy_attack
+            enemy_missed = 0
+        print(move, 'damaged', enemy_name, 'for', damage)
+        if burn_effect == 1:
+            print('The', enemy_name, 'is burning')
+            print('Burn did 4 Damage')
         print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
         print()
-        print('        The', enemy_name, 'has perished')
-        print()
-        leveling()
-        print('You now have', xp)
         text_convert = int(max_health / health_print_max)
         current_health = int(health / text_convert)
         remainingHealth = health_print_max - current_health
         health_print = ''.join(['█' for x in range(current_health)])
         health_spacing = ''.join(['░' for x in range(remainingHealth)])
         print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
-        print('You found', '25$ on the', enemy_name)
-        temp_currency = temp_currency + 25
+        text_convert = int(enemy_max_health / enemy_health_print_max)
+        enemy_current_health = int(enemy_health / text_convert)
+        remaining_enemy_health = enemy_health_print_max - enemy_current_health
+        health_print = ''.join(['█' for x in range(enemy_current_health)])
+        health_spacing = ''.join(['░' for x in range(remaining_enemy_health)])
+        print('Enemy Health:', '[' + Fore.MAGENTA + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
         print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-        if dungeon == 1:
-            valkyrie()
-    clear()
-    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-    if random.randint(1, 100) > mobility:
-        enemy_attack_percent = enemy_attack/100*armor
-        enemy_attack = enemy_attack - enemy_attack_percent
-        health = health - enemy_attack
-        enemy_missed = 0
-    print(move, 'damaged', enemy_name, 'for', damage)
-    if burn_effect == 1:
-        print('The', enemy_name, 'is burning')
-        print('Burn did 4 Damage')
-    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-    print()
-    text_convert = int(max_health / health_print_max)
-    current_health = int(health / text_convert)
-    remainingHealth = health_print_max - current_health
-    health_print = ''.join(['█' for x in range(current_health)])
-    health_spacing = ''.join(['░' for x in range(remainingHealth)])
-    print('Health:', '      [' + Fore.RED + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
-    text_convert = int(enemy_max_health / enemy_health_print_max)
-    enemy_current_health = int(enemy_health / text_convert)
-    remaining_enemy_health = enemy_health_print_max - enemy_current_health
-    health_print = ''.join(['█' for x in range(enemy_current_health)])
-    health_spacing = ''.join(['░' for x in range(remaining_enemy_health)])
-    print('Enemy Health:', '[' + Fore.MAGENTA + health_print + Fore.WHITE + health_spacing + Fore.BLACK + ']')
-    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-    if enemy_missed == 0:
-        print('The', enemy_name, 'used', random.choice(enemy_attacks))
-        print(enemy_name, ':', random.choice(enemy_quote))
-    if enemy_missed == 1:
-        print(enemy_name, 'missed')
-    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-    input('Press enter to continue')
-    repeated()
-    attack()
+        if enemy_missed == 0:
+            print('The', enemy_name, 'used', random.choice(enemy_attacks))
+            print(enemy_name, ':', random.choice(enemy_quote))
+        if enemy_missed == 1:
+            print(enemy_name, 'missed')
+        print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+        input('Press enter to continue')
+        repeated()
+        attack()
 
 
 def valkyrie():
-    global choice
-    sleep(10)
+    global choice, enemy_count, first_loop_v
+    sleep(1)
     clear()
-    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-    print()
-    print('Valkyrie fight')
-    print()
-    print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
-    choice = input('...')
+    if first_loop_v == 0:
+        enemy_count = 5
+        first_loop_v = 1
+        valkyrie()
+    elif first_loop_v == 1:
+        rand_enemy = random.randint(1, 2)
+        if enemy_count > 0:
+            if rand_enemy == 1:
+                ancient_viking()
+            if rand_enemy == 2:
+                spider()
+        else:
+            print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+            print()
+            print('You walk into a dark cave ')
+            print()
+            print(Fore.BLUE + '████████████████████████████████' + Fore.BLACK)
+            choice = input('...')
+
+
+def ancient_viking():
+    print('Gay')
+
+
+def spider():
+    
+    print('As you explore the cave further you find a giant spider dangling'
+          ' from the roof as it looks hungrily at its next snack')
+
 
 
 def game_over():
